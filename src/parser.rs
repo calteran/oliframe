@@ -11,6 +11,10 @@ pub struct Args {
     #[arg(short, long, value_name = "DIR")]
     dir: Option<String>,
 
+    /// File extension of input files to accept (use multiple times for multiple formats)
+    #[arg(short = 'x', long, value_name = "FMT")]
+    extension: Vec<String>,
+
     /// Output destination
     #[arg(short, long, value_name = "DEST")]
     output: Option<String>,
