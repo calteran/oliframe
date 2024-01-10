@@ -31,10 +31,18 @@ qwikborder -w 10 -c white -d images
 qwikborder -s _bordered -d images
 ```
 
+## Contributing
+
+Pull requests are welcome.  For major changes, please open an issue first to discuss what you would like to change.
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
 
-## Contributing
+## AI-Assisted Development
 
-Pull requests are welcome.  For major changes, please open an issue first to discuss what you would like to change.
+This project has been developed with the assistance of AI-powered tools, including ChatGPT and GitHub Copilot.
+These tools have contributed to various aspects of the code,
+ranging from generating initial code snippets to offering suggestions for code optimization and bug fixes.
+While these tools have aided in the development process,
+the design and implementation of this project is the work of the author.
