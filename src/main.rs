@@ -1,11 +1,16 @@
 mod parser;
 
 use clap::Parser;
+use crossterm::event::read;
 use image::RgbaImage;
 use indicatif::ParallelProgressIterator;
 use parser::Args;
 use rayon::prelude::*;
 use std::path::{Path, PathBuf};
+
+enum Error {
+    OverwriteProhibitedError,
+}
 
 fn collect_files(args: &Args) -> Vec<String> {
     let mut files: Vec<String> = Vec::new();
@@ -13,7 +18,9 @@ fn collect_files(args: &Args) -> Vec<String> {
     if !args.file.is_empty() {
         files.extend(args.file.clone());
     } else if let Some(dir) = &args.dir {
-        println!("Searching for files in {}", dir);
+        if !args.quiet {
+            println!("Searching for files in {}", dir);
+        }
         files.extend(
             std::fs::read_dir(dir)
                 .expect("Unable to read directory")
@@ -148,13 +155,51 @@ fn process_file(path: &Path, args: &Args) {
     }
 }
 
+fn validate_overwrite(args: &Args, files: &Vec<String>) -> Result<(), Error> {
+    if !args.overwrite && args.suffix.is_none() && args.prefix.is_none() && args.output.is_none() {
+        println!(
+            "This operation will overwrite {} files.  Continue (y/N)?",
+            files.len()
+        );
+
+        return match read() {
+            Ok(event) => match event {
+                crossterm::event::Event::Key(key_event) => match key_event.code {
+                    crossterm::event::KeyCode::Char('y') => Ok(()),
+                    _ => Err(Error::OverwriteProhibitedError),
+                },
+                _ => Err(Error::OverwriteProhibitedError),
+            },
+            Err(_) => Err(Error::OverwriteProhibitedError),
+        };
+    }
+
+    Ok(())
+}
+
 fn main() {
     let args = Args::parse();
     let files = collect_files(&args);
     let files = filter_files_by_extension(files, &args);
     let bar_style = create_progress_bar_style(&args);
-    files
-        .par_iter()
-        .progress_with_style(bar_style)
-        .for_each(|file| process_file(Path::new(file), &args));
+
+    if let Err(e) = validate_overwrite(&args, &files) {
+        match e {
+            Error::OverwriteProhibitedError => {
+                eprintln!("Overwrite prohibited.  Exiting.");
+                std::process::exit(1);
+            }
+        }
+    }
+
+    if args.quiet {
+        files
+            .par_iter()
+            .for_each(|file| process_file(Path::new(file), &args));
+    } else {
+        files
+            .par_iter()
+            .progress_with_style(bar_style.clone())
+            .for_each(|file| process_file(Path::new(file), &args));
+    };
 }

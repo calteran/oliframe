@@ -47,7 +47,16 @@ pub struct Args {
     #[arg(short, long)]
     pub verbose: bool,
 
+    /// Quiet output -- suppresses all output except errors
+    #[arg(short, long)]
+    pub quiet: bool,
+
     /// Dry run (don't actually create output files)
     #[arg(long)]
     pub dry_run: bool,
+
+    /// Overwrite existing files.
+    /// Default is to ask for each image before overwriting if this flag is not specified.
+    #[arg(short = 'y', long)]
+    pub overwrite: bool,
 }
