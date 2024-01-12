@@ -1,6 +1,6 @@
-use std::path::PathBuf;
 use clap::Parser;
-
+use csscolorparser::Color;
+use std::path::PathBuf;
 
 #[derive(Clone, Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -12,7 +12,7 @@ pub struct Args {
     /// Director(y/ies) to search for input files
     #[arg(short, long, value_name = "DIR", value_parser = path_parser)]
     pub dir: Vec<PathBuf>,
-    
+
     /// Recursively search for input files in the specified director(y/ies)
     #[arg(short = 'R', long)]
     pub recursive: bool,
@@ -34,16 +34,27 @@ pub struct Args {
     pub suffix: Option<String>,
 
     /// Border width in percent of average dimension, ie: (width + height) / 2.0.  Default is 5%.
-    #[arg(short = 'C', long = "pct", conflicts_with = "pixels", value_name = "%WIDTH", default_value = "5")]
+    #[arg(
+        short = 'C',
+        long = "pct",
+        conflicts_with = "pixels",
+        value_name = "%WIDTH",
+        default_value = "5"
+    )]
     pub percent: Option<u32>,
 
     /// Border with in pixels, default is 0 (disabled)
-    #[arg(short = 'X', long = "px", conflicts_with = "percent", value_name = "PIXELS")]
+    #[arg(
+        short = 'X',
+        long = "px",
+        conflicts_with = "percent",
+        value_name = "PIXELS"
+    )]
     pub pixels: Option<u32>,
 
-    /// Border color, name or hex code
-    #[arg(short, long, value_name = "COLOR", default_value = "white")]
-    pub color: String,
+    /// Border color, any legal CSS color value
+    #[arg(short, long, value_name = "COLOR", default_value = "white", value_parser = csscolorparser::parse)]
+    pub color: Color,
 
     /// Border corner radius (in pixels; requires --px)
     #[arg(short, long, value_name = "RADIUS", requires = "pixels")]
@@ -68,14 +79,11 @@ pub struct Args {
 }
 
 fn extension_parser(ext: &str) -> Result<String, String> {
-    // strip leading dot, if present
-    let ext = if ext.starts_with('.') {
-        &ext[1..]
+    if let Some(ext) = ext.strip_prefix('.') {
+        Ok(ext.to_string())
     } else {
-        ext
-    };
-
-    Ok(ext.to_string())
+        Ok(ext.to_string())
+    }
 }
 
 fn path_parser(path: &str) -> Result<PathBuf, String> {

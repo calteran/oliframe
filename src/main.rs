@@ -2,11 +2,10 @@ mod args;
 mod file_collector;
 mod image_file;
 
-use clap::Parser;
-use rayon::prelude::*;
 use args::Args;
+use clap::Parser;
 use file_collector::FileCollector;
-
+use rayon::prelude::*;
 
 fn main() {
     let args = Args::parse();
@@ -16,8 +15,10 @@ fn main() {
         println!("Processing {} files..", files.len());
     }
 
-    files.files().par_iter().for_each(|image| {
-        match image.add_border(&args) {
+    files
+        .files()
+        .par_iter()
+        .for_each(|image| match image.add_border(&args) {
             Ok(_) => {
                 if !args.quiet && !args.dry_run {
                     println!("Processed {}", image);
@@ -26,6 +27,5 @@ fn main() {
             Err(e) => {
                 eprintln!("Unable to process {}: {}", image, e);
             }
-        }
-    });
+        });
 }

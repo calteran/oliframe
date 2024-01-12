@@ -1,9 +1,9 @@
-use std::ffi::{OsStr, OsString};
-use std::path::{Path, PathBuf};
-use junk_file::is_not_junk;
-use std::fmt::Display;
 use crate::args::Args;
 use crate::image_file::ImageFile;
+use junk_file::is_not_junk;
+use std::ffi::{OsStr, OsString};
+use std::fmt::Display;
+use std::path::{Path, PathBuf};
 
 enum OverwriteResult {
     NoConflict,
@@ -27,8 +27,9 @@ impl FileCollector {
     /// The user will be given the option to overwrite all remaining files each time an overwrite is confirmed.
     pub fn from_args(args: &Args) -> Result<Self, String> {
         let mut overwrite_all = args.overwrite;
-        let files = input_files(args).into_iter().filter_map(|input_path| {
-            match output_path(args, &input_path) {
+        let files = input_files(args)
+            .into_iter()
+            .filter_map(|input_path| match output_path(args, &input_path) {
                 Ok(output_path) => {
                     if overwrite_all {
                         Some(ImageFile::new(input_path, output_path))
@@ -44,13 +45,17 @@ impl FileCollector {
                             _ => None,
                         }
                     }
-                },
+                }
                 Err(e) => {
-                    eprintln!("Unable to get output path for {}: {}", input_path.display(), e);
+                    eprintln!(
+                        "Unable to get output path for {}: {}",
+                        input_path.display(),
+                        e
+                    );
                     None
                 }
-            }
-        }).collect();
+            })
+            .collect();
         Ok(Self { files })
     }
 
@@ -69,24 +74,32 @@ fn validate_overwrite(output_path: &Path) -> OverwriteResult {
     match output_path.try_exists() {
         Ok(true) => {
             if atty::is(atty::Stream::Stdout) {
-                println!("{} already exists.  Overwrite? (Y)es (N)o (A)ll ", output_path.display());
+                println!(
+                    "{} already exists.  Overwrite? (Y)es (N)o (A)ll ",
+                    output_path.display()
+                );
                 let mut input = String::new();
                 std::io::stdin().read_line(&mut input).unwrap();
                 match input.to_lowercase().trim() {
                     "y" | "yes" => OverwriteResult::Overwrite,
-                    "a" | "all" => {
-                        OverwriteResult::OverwriteAll
-                    }
+                    "a" | "all" => OverwriteResult::OverwriteAll,
                     _ => OverwriteResult::Skip,
                 }
             } else {
-                eprintln!("{} already exists.  Run with --overwrite to overwrite.", output_path.display());
+                eprintln!(
+                    "{} already exists.  Run with --overwrite to overwrite.",
+                    output_path.display()
+                );
                 OverwriteResult::Skip
             }
         }
         Ok(false) => OverwriteResult::NoConflict,
         Err(e) => {
-            eprintln!("Unable to check for existing file {}: {}", output_path.display(), e);
+            eprintln!(
+                "Unable to check for existing file {}: {}",
+                output_path.display(),
+                e
+            );
             OverwriteResult::Error
         }
     }
@@ -109,7 +122,10 @@ fn input_files(args: &Args) -> Vec<PathBuf> {
     if !args.dir.is_empty() {
         for dir in &args.dir {
             if args.verbose {
-                println!("Searching for files in {}...", dir.canonicalize().unwrap_or_default().display());
+                println!(
+                    "Searching for files in {}...",
+                    dir.canonicalize().unwrap_or_default().display()
+                );
             }
             files.append(&mut extract_files(args, dir, 0));
         }
@@ -120,7 +136,8 @@ fn input_files(args: &Args) -> Vec<PathBuf> {
         for file in &args.file {
             files.push(PathBuf::from(file));
         }
-    } else { // no dir or file specified, so search current directory
+    } else {
+        // no dir or file specified, so search current directory
         files.append(&mut extract_files(args, &PathBuf::from("."), 0));
     }
 
@@ -137,9 +154,7 @@ fn extract_files(args: &Args, path: &PathBuf, depth: u8) -> Vec<PathBuf> {
     let mut files = Vec::new();
 
     if path.is_file() && is_not_junk(path.file_name().unwrap_or_default()) {
-        if args.extension.is_empty() {
-            files.push(path.to_path_buf());
-        } else if has_specified_extension(args, path) {
+        if args.extension.is_empty() || has_specified_extension(args, path) {
             files.push(path.to_path_buf());
         }
     } else if (args.recursive || depth == 0) && path.is_dir() {
@@ -185,9 +200,10 @@ fn output_path(args: &Args, input_path: &Path) -> Result<PathBuf, FileCollectorE
     let stem = if let Some(stem) = input_path.file_stem() {
         stem
     } else {
-        return Err(FileCollectorError::InvalidFileStemError(input_path.display().to_string()));
+        return Err(FileCollectorError::InvalidFileStemError(
+            input_path.display().to_string(),
+        ));
     };
-
 
     if let Some(output) = &args.output {
         output_path.push(output);
@@ -213,7 +229,6 @@ fn output_path(args: &Args, input_path: &Path) -> Result<PathBuf, FileCollectorE
 
     Ok(output_path)
 }
-
 
 #[derive(Debug)]
 pub enum FileCollectorError {
