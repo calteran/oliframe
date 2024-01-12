@@ -1,5 +1,5 @@
 [package]
-name = "qwikborder"
+name = "oliframe"
 description = "Add a border to one or more images (quickly)"
 version = "0.1.0"
 edition = "2021"
