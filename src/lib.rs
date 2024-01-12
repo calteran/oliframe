@@ -1,10 +1,15 @@
-use csscolorparser::Color;
+pub use csscolorparser::Color as Color;
+pub use image;
+
 use image::{DynamicImage, GenericImageView, Rgba, RgbaImage};
 
 type Pixels = u32;
 
+/// Border width can be specified in pixels or as a percentage of the average dimension
 pub enum BorderWidth {
+    /// Border width as a percentage of the average dimension ie: (width + height) / 2
     Percent(u32),
+    /// Border width in pixels
     Pixels(u32),
 }
 
@@ -35,6 +40,29 @@ impl Point {
     }
 }
 
+/// Adds a border to the given image
+///
+/// # Arguments
+///
+/// * `img` - The image to add a border to
+/// * `width` - The width of the border, either in pixels or as a percentage of the average dimension
+/// * `color` - The color of the border
+/// * `radius` - The radius of the border corners, in pixels
+///
+/// # Returns
+///
+/// A new image with the border added
+///
+/// # Examples
+///
+/// ```
+/// use oliframe::{add_border, BorderWidth};
+/// use oliframe::image::DynamicImage;
+/// use oliframe::Color;
+///
+/// let img = DynamicImage::new_rgb8(100, 100);
+/// let border = add_border(&img, BorderWidth::Pixels(10), &"red".parse::<Color>().unwrap(), None);
+/// ```
 pub fn add_border(
     img: &DynamicImage,
     width: BorderWidth,

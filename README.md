@@ -67,7 +67,6 @@ Loading and saving images is left to the user.
 
 ```rust
 use oliframe::*;
-use image::prelude::*;
 
 fn main() {
     let img = image::open("image.jpg").unwrap();
