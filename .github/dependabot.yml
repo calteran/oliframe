@@ -4,7 +4,7 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-      day-of-week: "monday"
+      day: "monday"
       timezone: "Etc/UTC"
       time: "03:00"
     target-branch: "develop"
@@ -12,7 +12,7 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-      day-of-week: "monday"
+      day: "monday"
       timezone: "Etc/UTC"
       time: "03:00"
     target-branch: "develop"
