@@ -8,6 +8,7 @@ use crate::image_file::ImageFile;
 use junk_file::is_not_junk;
 use std::ffi::{OsStr, OsString};
 use std::fmt::Display;
+use std::io::IsTerminal;
 use std::path::{Path, PathBuf};
 
 enum OverwriteResult {
@@ -79,7 +80,7 @@ impl FileCollector {
 fn validate_overwrite(output_path: &Path) -> OverwriteResult {
     match output_path.try_exists() {
         Ok(true) => {
-            if atty::is(atty::Stream::Stdout) {
+            if std::io::stdin().is_terminal() {
                 println!(
                     "{} already exists.  Overwrite? (Y)es (N)o (A)ll ",
                     output_path.display()
