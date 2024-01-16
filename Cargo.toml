@@ -1,9 +1,17 @@
 [package]
 name = "oliframe"
-description = "Add a border to one or more images (quickly)"
+description = "Add a simple border to one or more images"
+repository = "https://github.com/calteran/oliframe"
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
+readme = "README.md"
+documentation = "https://docs.rs/oliframe"
+homepage = "https://github.com/calteran/oliframe"
+categories = ["command-line-utilities", "graphics"]
+keywords = ["image", "border", "frame"]
+exclude = ["samples/", ".github/"]
+rust-version = "1.75.0"
 
 [dependencies]
 clap = { version = "4.4.11", features = ["derive"] }

@@ -1,5 +1,10 @@
 # oliframe
 
+[![oliframe](https://github.com/calteran/oliframe/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/calteran/oliframe/actions/workflows/ci.yml)
+[![crates.io](https://img.shields.io/crates/v/oliframe.svg)](https://crates.io/crates/oliframe)
+[![docs.rs](https://docs.rs/oliframe/badge.svg)](https://docs.rs/oliframe)
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://calteran.mit-license.org/)
+
 **oliframe** is a simple command line tool to add borders to images.  It can process a single image or multiple directories at a time.
 
 ## Installation
