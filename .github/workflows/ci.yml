@@ -19,17 +19,24 @@ jobs:
         uses: actions/checkout@v4
       - name: configure toolchain
         run: rustup toolchain install stable --profile minimal
-      - name: install machete
-        run: cargo install cargo-machete
-      - name: run machete
-        run: cargo machete
-      - name: format
-        run: cargo fmt --all -- --check
       - name: build
         run: cargo build
-      - name: clippy
-        run: cargo clippy --all-targets --all-features -- -D warnings
       - name: test
         run: cargo test
       - name: docs
         run: cargo doc --no-deps
+  enforce-clean-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: configure toolchain
+        run: rustup toolchain install stable --profile minimal
+      - name: run deny
+        uses: EmbarkStudios/cargo-deny-action@v1
+      - name: run machete
+        uses: bnjbvr/cargo-machete@main
+      - name: format
+        run: cargo fmt --all -- --check
+      - name: clippy
+        run: cargo clippy --all-targets --all-features -- -D warnings
