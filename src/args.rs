@@ -1,3 +1,6 @@
+//! Command line argument parsing
+//!
+//! This module defines the Args struct, which is used to parse command line arguments.
 use clap::Parser;
 use csscolorparser::Color;
 use std::path::PathBuf;

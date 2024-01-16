@@ -1,8 +1,13 @@
+//! ImageFile struct and methods
+//!
+//! The ImageFile struct represents a single image file that will be processed by the program.
+
 use crate::args::Args;
 use oliframe::{add_border, BorderWidth};
 use std::fmt::Display;
 use std::path::PathBuf;
 
+/// Represents a single image file that will be processed by the program
 pub struct ImageFile {
     input_path: PathBuf,
     output_path: PathBuf,
@@ -15,6 +20,7 @@ impl Display for ImageFile {
 }
 
 impl ImageFile {
+    /// Creates a new ImageFile instance
     pub fn new(input_path: PathBuf, output_path: PathBuf) -> Self {
         Self {
             input_path,
@@ -22,6 +28,7 @@ impl ImageFile {
         }
     }
 
+    /// Adds a border to the image file
     pub fn add_border(&self, args: &Args) -> Result<(), String> {
         let img = image::open(&self.input_path)
             .map_err(|e| format!("Unable to open {}: {}", self.input_path.display(), e))?;

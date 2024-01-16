@@ -1,3 +1,8 @@
+//! # FileCollector
+//!
+//! This module contains the FileCollector struct, which is responsible for collecting a list of files
+//! to be processed by the program.
+
 use crate::args::Args;
 use crate::image_file::ImageFile;
 use junk_file::is_not_junk;
@@ -70,6 +75,7 @@ impl FileCollector {
     }
 }
 
+// Checks if a file exists, and if it does, prompts the user to confirm overwriting it.
 fn validate_overwrite(output_path: &Path) -> OverwriteResult {
     match output_path.try_exists() {
         Ok(true) => {
@@ -105,17 +111,17 @@ fn validate_overwrite(output_path: &Path) -> OverwriteResult {
     }
 }
 
-/// Returns a list of input files
-///
-/// This function will return a list of input files based on the following rules:
-///
-/// 1. If the `--dir` option is specified, all files in that directory will be returned.
-/// 2. If the `--file` option is specified, all files specified will be returned.
-/// 3. If both `--dir` and `--file` are specified, all files in the directory will be returned, and all files specified will be returned.
-/// 4. If neither `--dir` nor `--file` are specified, all files in the current directory will be returned.
-/// 5. If the `--extension` option is specified,
-///     only files with the specified extension(s) will be returned.
-/// 6. The `junk_file` crate is used to filter out OS-specific junk files.
+// Returns a list of input files
+//
+// This function will return a list of input files based on the following rules:
+//
+// 1. If the `--dir` option is specified, all files in that directory will be returned.
+// 2. If the `--file` option is specified, all files specified will be returned.
+// 3. If both `--dir` and `--file` are specified, all files in the directory will be returned, and all files specified will be returned.
+// 4. If neither `--dir` nor `--file` are specified, all files in the current directory will be returned.
+// 5. If the `--extension` option is specified,
+//     only files with the specified extension(s) will be returned.
+// 6. The `junk_file` crate is used to filter out OS-specific junk files.
 fn input_files(args: &Args) -> Vec<PathBuf> {
     let mut files: Vec<PathBuf> = Vec::new();
 
@@ -149,7 +155,7 @@ fn input_files(args: &Args) -> Vec<PathBuf> {
     files
 }
 
-/// Given a path, returns a list of files in that path that match the specified extension(s)
+// Given a path, returns a list of files in that path that match the specified extension(s)
 fn extract_files(args: &Args, path: &PathBuf, depth: u8) -> Vec<PathBuf> {
     let mut files = Vec::new();
 
@@ -185,7 +191,7 @@ fn extract_files(args: &Args, path: &PathBuf, depth: u8) -> Vec<PathBuf> {
     files
 }
 
-/// Returns true if the given path's extension matches one of the specified extensions.
+// Returns true if the given path's extension matches one of the specified extensions.
 fn has_specified_extension(args: &Args, path: &Path) -> bool {
     match path.extension() {
         Some(path_ext) => args.extension.iter().any(|ext| path_ext == OsStr::new(ext)),
@@ -193,7 +199,7 @@ fn has_specified_extension(args: &Args, path: &Path) -> bool {
     }
 }
 
-/// Returns the output path for the given input path
+// Returns the output path for the given input path
 fn output_path(args: &Args, input_path: &Path) -> Result<PathBuf, FileCollectorError> {
     let mut output_path = PathBuf::new();
     let extension = input_path.extension().unwrap_or(OsStr::new(""));

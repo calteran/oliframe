@@ -1,4 +1,7 @@
-pub use csscolorparser::Color as Color;
+#![deny(missing_docs)]
+//! Add simple borders to images using the `image` crate.
+
+pub use csscolorparser::Color;
 pub use image;
 
 use image::{DynamicImage, GenericImageView, Rgba, RgbaImage};

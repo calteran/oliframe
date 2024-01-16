@@ -1,3 +1,6 @@
+#![deny(missing_docs)]
+//! A simple tool to add borders to images.
+
 mod args;
 mod file_collector;
 mod image_file;

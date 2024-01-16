@@ -10,6 +10,9 @@ cargo install oliframe
 ```
 
 ### For library usage
+While the purpose of this project is to provide a command-line tool,
+the underlying library can be used in other projects.
+
 Add the following to your `Cargo.toml` file:
 ```toml
 [dependencies]
