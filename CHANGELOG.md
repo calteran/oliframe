@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/calteran/oliframe/compare/v0.1.0...HEAD)
 
+## [0.1.1](https://github.com/calteran/oliframe/compare/v0.1.0...v0.1.1) - 2024-01-25
+
+### Fixed
+- dependabot.yml syntax
+
+### Other
+- *(ci)* don't require CI on `release-plz` release branches
+- *(ci)* remove unneeded push CI triggers
+- change method to add as library in `README.md`
+- *(deps)* bump rayon from 1.8.0 to 1.8.1
+- *(deps)* bump clap from 4.4.17 to 4.4.18
+- add roadmap section to README.md; mention future --watch option
+- *(deps)* bump image from 0.24.7 to 0.24.8
+- *(deps)* bump clap from 4.4.12 to 4.4.17
+
 ## [0.1.0](https://github.com/calteran/oliframe/releases/tag/v0.1.0) - 2024-01-16
 
 ### Added
