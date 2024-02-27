@@ -9,10 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.2](https://github.com/calteran/oliframe/compare/v0.1.1...v0.1.2) - 2024-02-27
 
 ### Other
-- Merge branch 'main' into develop
 - *(deps)* bump image from 0.24.8 to 0.24.9
-- *(deps)* bump clap from 4.5.0 to 4.5.1
-- *(deps)* bump clap from 4.4.18 to 4.5.0
+- *(deps)* bump clap from 4.4.18 to 4.5.1
 
 ## [0.1.1](https://github.com/calteran/oliframe/compare/v0.1.0...v0.1.1) - 2024-01-25
 
