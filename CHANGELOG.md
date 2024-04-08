@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/calteran/oliframe/compare/v0.1.0...HEAD)
 
+## [0.1.3](https://github.com/calteran/oliframe/compare/v0.1.2...v0.1.3) - 2024-04-08
+
+### Other
+- Merge branch 'main' into develop
+- *(deps)* bump clap from 4.5.3 to 4.5.4
+- *(deps)* bump image from 0.25.0 to 0.25.1
+- *(deps)* bump rayon from 1.9.0 to 1.10.0
+- *(deps)* bump clap from 4.5.2 to 4.5.3
+- *(deps)* bump image from 0.24.9 to 0.25.0
+- *(deps)* bump clap from 4.5.1 to 4.5.2
+- *(deps)* bump rayon from 1.8.1 to 1.9.0
+
 ## [0.1.2](https://github.com/calteran/oliframe/compare/v0.1.1...v0.1.2) - 2024-02-27
 
 ### Other
