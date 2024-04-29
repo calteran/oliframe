@@ -3,6 +3,8 @@
 //! The ImageFile struct represents a single image file that will be processed by the program.
 
 use crate::args::Args;
+use image::buffer::ConvertBuffer;
+use image::{ImageFormat, RgbImage, RgbaImage};
 use oliframe::{add_border, BorderWidth};
 use std::fmt::Display;
 use std::path::PathBuf;
@@ -38,16 +40,37 @@ impl ImageFile {
         };
 
         let new_img = add_border(&img, width, &args.color, args.radius);
+
+        let fmt = ImageFormat::from_path(&self.output_path).map_err(|e| {
+            format!(
+                "Unable to parse output format: {}: {}",
+                self.output_path.display(),
+                e
+            )
+        })?;
+
         if args.dry_run {
             println!(
                 "Would write {} to {}",
                 self.input_path.display(),
                 self.output_path.display()
             );
-        } else {
-            new_img
-                .save(&self.output_path)
-                .map_err(|e| format!("Unable to save {}: {}", self.output_path.display(), e))?;
+
+            return Ok(());
+        }
+
+        match fmt {
+            ImageFormat::Jpeg => {
+                let new_img: RgbImage = new_img.convert();
+                new_img
+                    .save(&self.output_path)
+                    .map_err(|e| format!("Unable to save {}: {}", self.output_path.display(), e))?;
+            }
+            _ => {
+                new_img
+                    .save(&self.output_path)
+                    .map_err(|e| format!("Unable to save {}: {}", self.output_path.display(), e))?;
+            }
         }
 
         Ok(())
