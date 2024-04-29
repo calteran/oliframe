@@ -4,7 +4,7 @@
 
 use crate::args::Args;
 use image::buffer::ConvertBuffer;
-use image::{ImageFormat, RgbImage, RgbaImage};
+use image::{ImageFormat, RgbImage};
 use oliframe::{add_border, BorderWidth};
 use std::fmt::Display;
 use std::path::PathBuf;
