@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/calteran/oliframe/compare/v0.1.0...HEAD)
 
+## [0.1.5](https://github.com/calteran/oliframe/compare/v0.1.4...v0.1.5) - 2024-04-29
+
+### Fixed
+- skip alpha processing on JPEG outputs
+
 ## [0.1.4](https://github.com/calteran/oliframe/compare/v0.1.3...v0.1.4) - 2024-04-14
 
 ### Fixed
