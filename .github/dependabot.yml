@@ -8,6 +8,8 @@ updates:
       timezone: "Etc/UTC"
       time: "03:00"
     target-branch: "develop"
+    assignees:
+      - "calteran"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -16,3 +18,5 @@ updates:
       timezone: "Etc/UTC"
       time: "03:00"
     target-branch: "develop"
+    assignees:
+      - "calteran"
