@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/calteran/oliframe/compare/v0.1.0...HEAD)
 
+## [0.1.6](https://github.com/calteran/oliframe/compare/v0.1.5...v0.1.6) - 2024-07-01
+
+### Other
+- *(deps)* bump clap from 4.5.7 to 4.5.8
+- *(deps)* bump clap from 4.5.4 to 4.5.7
+
 ## [0.1.5](https://github.com/calteran/oliframe/compare/v0.1.4...v0.1.5) - 2024-04-29
 
 ### Fixed
