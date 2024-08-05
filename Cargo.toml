@@ -14,7 +14,7 @@ exclude = ["samples/", ".github/"]
 rust-version = "1.75.0"
 
 [dependencies]
-clap = { version = "4.5.9", features = ["derive"] }
+clap = { version = "4.5.13", features = ["derive"] }
 csscolorparser = "0.6.2"
 image = "0.25.2"
 junk_file = "0.1.1"
