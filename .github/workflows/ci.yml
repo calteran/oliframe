@@ -31,7 +31,7 @@ jobs:
       - name: configure toolchain
         run: rustup toolchain install stable --profile minimal
       - name: run deny
-        uses: EmbarkStudios/cargo-deny-action@v1
+        uses: EmbarkStudios/cargo-deny-action@v2
       - name: run machete
         uses: bnjbvr/cargo-machete@main
       - name: format
