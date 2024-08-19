@@ -2,7 +2,7 @@
 name = "oliframe"
 description = "Add a simple border to one or more images"
 repository = "https://github.com/calteran/oliframe"
-version = "0.1.6"
+version = "0.1.7"
 edition = "2021"
 license = "MIT"
 readme = "README.md"
