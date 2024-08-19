@@ -9,15 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.7](https://github.com/calteran/oliframe/compare/v0.1.6...v0.1.7) - 2024-08-19
 
 ### Other
-- release dep updates ([#60](https://github.com/calteran/oliframe/pull/60))
 - change to monthly, grouped dependabot updates
-- *(deps)* bump csscolorparser from 0.6.2 to 0.7.0
-- *(deps)* bump clap from 4.5.13 to 4.5.16
-- *(deps)* bump clap from 4.5.9 to 4.5.13
 - Simplify deny.toml and update allowed licenses
+- *(deps)* bump csscolorparser from 0.6.2 to 0.7.0
+- *(deps)* bump clap from 4.5.8 to 4.5.16
 - *(deps)* bump EmbarkStudios/cargo-deny-action from 1 to 2
 - *(deps)* bump image from 0.25.1 to 0.25.2
-- *(deps)* bump clap from 4.5.8 to 4.5.9
 
 ## [0.1.6](https://github.com/calteran/oliframe/compare/v0.1.5...v0.1.6) - 2024-07-01
 
