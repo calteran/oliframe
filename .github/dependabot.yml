@@ -3,20 +3,22 @@ updates:
   - package-ecosystem: "cargo"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
-      timezone: "Etc/UTC"
-      time: "03:00"
+      interval: "monthly"
     target-branch: "develop"
     assignees:
       - "calteran"
+    groups:
+      crate-deps:
+        patterns:
+          - "*"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
-      timezone: "Etc/UTC"
-      time: "03:00"
+      interval: "monthly"
     target-branch: "develop"
     assignees:
       - "calteran"
+    groups:
+      actions-deps:
+        patterns:
+          - "*"
