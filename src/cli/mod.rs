@@ -1,5 +1,7 @@
 //! Command line interface
 
+use crate::config::Config;
+use crate::errors::OliframeError;
 pub use clap::Parser;
 use frame_options::FrameOptions;
 use input_options::InputOptions;
@@ -39,6 +41,18 @@ impl Cli {
     }
 }
 
+impl TryFrom<Cli> for Config {
+    type Error = OliframeError;
+
+    fn try_from(cli: Cli) -> Result<Self, Self::Error> {
+        Ok(Config::new(
+            cli.input_opts.into(),
+            cli.output_opts.into(),
+            cli.frame_opts.try_into()?,
+        ))
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -46,5 +60,36 @@ mod tests {
     fn verify_cli() {
         use clap::CommandFactory;
         Cli::command().debug_assert();
+    }
+
+    #[test]
+    fn parse_cli() {
+        let opts = vec![
+            "oliframe",
+            "-i",
+            "input.jpg",
+            "-R",
+            "-x",
+            "jpg",
+            "-o",
+            "output",
+            "-f",
+            "-p",
+            "prefix",
+            "-s",
+            "suffix",
+            "-y",
+            "-c",
+            "white",
+            "-m",
+            "10px,20px",
+            "-P",
+            "top-left",
+            "-u",
+            "200%",
+        ];
+        let args = Cli::parse_from(opts);
+        let config = Config::try_from(args).unwrap();
+        assert_eq!(config.input_config().extensions(), &["jpg"]);
     }
 }

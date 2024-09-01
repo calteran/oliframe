@@ -1,4 +1,5 @@
 //! Output options
+use crate::config::OutputConfig;
 use clap::Args;
 use std::path::PathBuf;
 
@@ -29,4 +30,44 @@ pub struct OutputOptions {
     /// Overwrite existing files.  If not specified, existing files will not be overwritten.
     #[arg(short = 'y', long)]
     overwrite: bool,
+}
+
+impl From<OutputOptions> for OutputConfig {
+    fn from(opts: OutputOptions) -> Self {
+        OutputConfig::new(
+            opts.dry_run,
+            opts.flatten,
+            opts.output,
+            opts.overwrite,
+            opts.prefix,
+            opts.suffix,
+        )
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::path::PathBuf;
+
+    #[test]
+    fn parse_output_options() {
+        let opts = OutputOptions {
+            dry_run: true,
+            output: Some(PathBuf::from("output")),
+            flatten: true,
+            prefix: Some("prefix".to_string()),
+            suffix: Some("suffix".to_string()),
+            overwrite: true,
+        };
+
+        let config = OutputConfig::from(opts);
+
+        assert_eq!(config.dry_run(), true);
+        assert_eq!(config.flatten(), true);
+        assert_eq!(config.output_root(), &Some(PathBuf::from("output")));
+        assert_eq!(config.overwrite(), true);
+        assert_eq!(config.prefix(), &Some("prefix".to_string()));
+        assert_eq!(config.suffix(), &Some("suffix".to_string()));
+    }
 }
