@@ -6,7 +6,7 @@ use std::path::PathBuf;
 /// Output options
 #[derive(Args, Debug)]
 pub struct OutputOptions {
-    /// Dry run (don't create output files)
+    /// Dry run (don't create output file_collector)
     #[arg(long)]
     dry_run: bool,
 
@@ -15,19 +15,19 @@ pub struct OutputOptions {
     #[arg(short = 'o', long, value_name = "FILE/FOLDER")]
     output: Option<PathBuf>,
 
-    /// Flatten the output directory structure when processing multiple input files
+    /// Flatten the output directory structure when processing multiple input file_collector
     #[arg(short = 'f', long, requires = "output", requires = "recursive")]
     flatten: bool,
 
-    /// Prefix to prepend to output files
+    /// Prefix to prepend to output file_collector
     #[arg(short = 'p', long, value_name = "PREFIX")]
     prefix: Option<String>,
 
-    /// Suffix to append to output files
+    /// Suffix to append to output file_collector
     #[arg(short = 's', long, value_name = "SUFFIX")]
     suffix: Option<String>,
 
-    /// Overwrite existing files.  If not specified, existing files will not be overwritten.
+    /// Overwrite existing file_collector.  If not specified, existing file_collector will not be overwritten.
     #[arg(short = 'y', long)]
     overwrite: bool,
 }

@@ -13,7 +13,7 @@ pub use output_config::OutputConfig;
 pub struct Config {
     input_config: InputConfig,
     output_config: OutputConfig,
-    task_config: FrameConfig,
+    frame_config: FrameConfig,
 }
 
 impl Config {
@@ -21,12 +21,12 @@ impl Config {
     pub fn new(
         input_config: InputConfig,
         output_config: OutputConfig,
-        task_config: FrameConfig,
+        frame_config: FrameConfig,
     ) -> Self {
         Self {
             input_config,
             output_config,
-            task_config,
+            frame_config,
         }
     }
 }

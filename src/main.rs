@@ -16,11 +16,15 @@ use env_logger::Builder as LogBuilder;
 
 use crate::cli::*;
 use crate::config::Config;
+use crate::file_collector::FileCollector;
 
 mod cli;
 mod config;
 mod errors;
+mod file_collector;
+mod frame;
 mod geometry;
+mod tasks;
 
 fn main() {
     let args = Cli::parse();
@@ -38,5 +42,9 @@ fn main() {
         }
     };
 
-    log::debug!("{:#?}", config);
+    log::debug!("Configuration: {:#?}", config);
+
+    let f = FileCollector::collect(&config);
+
+    log::debug!("Files: {:#?}", f);
 }

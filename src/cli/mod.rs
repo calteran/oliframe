@@ -46,7 +46,7 @@ impl TryFrom<Cli> for Config {
 
     fn try_from(cli: Cli) -> Result<Self, Self::Error> {
         Ok(Config::new(
-            cli.input_opts.into(),
+            cli.input_opts.try_into()?,
             cli.output_opts.into(),
             cli.frame_opts.try_into()?,
         ))
