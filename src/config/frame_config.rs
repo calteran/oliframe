@@ -1,5 +1,5 @@
 //! Frame configuration.
-use crate::geometry::{AspectRatio, Margins, RelativePosition, Size};
+use crate::geometry::{AspectRatio, Margins, RelativePosition};
 use derive_getters::Getters;
 use image::Rgba;
 
@@ -10,8 +10,7 @@ pub struct FrameConfig {
     color: Rgba<u8>,
     corner_radius: Option<u32>,
     margins: Margins,
-    position: Option<RelativePosition>,
-    upscale: Option<Size>,
+    position: RelativePosition,
 }
 
 impl FrameConfig {
@@ -21,8 +20,7 @@ impl FrameConfig {
         color: Rgba<u8>,
         corner_radius: Option<u32>,
         margins: Margins,
-        position: Option<RelativePosition>,
-        upscale: Option<Size>,
+        position: RelativePosition,
     ) -> Self {
         Self {
             aspect_ratio,
@@ -30,7 +28,6 @@ impl FrameConfig {
             corner_radius,
             margins,
             position,
-            upscale,
         }
     }
 }

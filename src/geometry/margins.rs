@@ -1,6 +1,6 @@
 //! Margins module.
 use crate::errors::OliframeError;
-use crate::geometry::Unit;
+use crate::geometry::{Size, Unit};
 use derive_getters::{Dissolve, Getters};
 use std::str::FromStr;
 
@@ -8,13 +8,35 @@ use std::str::FromStr;
 ///
 /// The user can specify the width of the margins on each side
 /// of the image in pixels (px) or percentage (%).
-#[derive(Debug, Dissolve, Getters)]
+#[derive(Clone, Debug, Dissolve, Getters)]
 pub struct Margins {
     top: u32,
     right: u32,
     bottom: u32,
     left: u32,
     unit: Unit,
+}
+
+impl Margins {
+    pub fn for_size(&self, size: &Size) -> Margins {
+        match self.unit() {
+            Unit::Pixel => self.clone(),
+            Unit::Percent => {
+                let (width, height) = size.dimensions();
+                let top = (self.top() as f32 / 100.0 * height as f32).round() as u32;
+                let right = (self.right() as f32 / 100.0 * width as f32).round() as u32;
+                let bottom = (self.bottom() as f32 / 100.0 * height as f32).round() as u32;
+                let left = (self.left() as f32 / 100.0 * width as f32).round() as u32;
+                Margins {
+                    top,
+                    right,
+                    bottom,
+                    left,
+                    unit: Unit::Pixel,
+                }
+            }
+        }
+    }
 }
 
 impl Default for Margins {

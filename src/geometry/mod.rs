@@ -1,14 +1,16 @@
 //! Geometry module.
 mod aspect_ratio;
 mod margins;
+mod point;
 mod relative_position;
 mod size;
 mod units;
 
 pub use aspect_ratio::AspectRatio;
 pub use margins::Margins;
+pub use point::Point;
 use regex::Regex;
-pub use relative_position::RelativePosition;
+pub use relative_position::*;
 pub use size::Size;
 use std::str::FromStr;
 pub use units::Unit;

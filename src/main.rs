@@ -13,10 +13,12 @@
 //!
 
 use env_logger::Builder as LogBuilder;
+use rayon::prelude::*;
 
 use crate::cli::*;
 use crate::config::Config;
 use crate::file_collector::FileCollector;
+use crate::frame::Frame;
 
 mod cli;
 mod config;
@@ -24,7 +26,6 @@ mod errors;
 mod file_collector;
 mod frame;
 mod geometry;
-mod tasks;
 
 fn main() {
     let args = Cli::parse();
@@ -44,7 +45,14 @@ fn main() {
 
     log::debug!("Configuration: {:#?}", config);
 
-    let f = FileCollector::collect(&config);
-
-    log::debug!("Files: {:#?}", f);
+    FileCollector::collect(&config)
+        .into_par_iter()
+        .for_each(|file_pair| {
+            Frame::process(
+                file_pair,
+                config.frame_config(),
+                config.output_config().dry_run(),
+            )
+            .unwrap_or_else(|e| log::error!("{}", e));
+        });
 }

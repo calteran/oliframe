@@ -12,6 +12,13 @@ pub struct Size {
     unit: Unit,
 }
 
+impl Size {
+    /// Extract the width and height values as a tuple.
+    pub fn dimensions(&self) -> (u32, u32) {
+        (self.width, self.height)
+    }
+}
+
 impl FromStr for Size {
     type Err = OliframeError;
 
@@ -44,6 +51,16 @@ impl FromStr for Size {
             _ => Err(OliframeError::InvalidInput(
                 "Please provide one or two size values.".to_string(),
             )),
+        }
+    }
+}
+
+impl From<(u32, u32)> for Size {
+    fn from(values: (u32, u32)) -> Self {
+        Self {
+            width: values.0,
+            height: values.1,
+            unit: Unit::Pixel,
         }
     }
 }

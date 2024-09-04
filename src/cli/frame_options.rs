@@ -2,7 +2,7 @@
 
 use crate::config::FrameConfig;
 use crate::errors::OliframeError;
-use crate::geometry::{AspectRatio, Margins, RelativePosition, Size};
+use crate::geometry::{AspectRatio, Margins, RelativePosition};
 use clap::Args;
 use csscolorparser::Color;
 use image::Rgba;
@@ -13,12 +13,7 @@ use std::str::FromStr;
 pub struct FrameOptions {
     /// Fix the final aspect ratio of the output image.
     /// Specify the ratio as a fraction (e.g.: "16:9") or a decimal (e.g.: "1.777").
-    #[arg(
-        long = "ar",
-        value_name = "RATIO",
-        help_heading = "Framing Options",
-        conflicts_with = "upscale"
-    )]
+    #[arg(long = "ar", value_name = "RATIO", help_heading = "Framing Options")]
     aspect_ratio: Option<String>,
 
     /// Color of the border/background.  Specify any valid CSS color.
@@ -40,16 +35,6 @@ pub struct FrameOptions {
     /// Vertical values: "top", "center", "bottom"
     #[arg(short = 'P', long, value_name = "POSITION")]
     position: Option<String>,
-
-    /// Size the output image to a specific size or scale relative to the input image.
-    /// E.g.: "200%", "200px,200px".
-    #[arg(
-        short = 'u',
-        long,
-        value_name = "SIZE",
-        conflicts_with = "aspect_ratio"
-    )]
-    upscale: Option<String>,
 }
 
 impl TryFrom<FrameOptions> for FrameConfig {
@@ -76,9 +61,8 @@ impl TryFrom<FrameOptions> for FrameConfig {
         let position = opts
             .position
             .map(|p| RelativePosition::from_str(&p))
-            .transpose()?;
-
-        let upscale = opts.upscale.map(|u| Size::from_str(&u)).transpose()?;
+            .transpose()?
+            .unwrap_or_default();
 
         Ok(FrameConfig::new(
             aspect_ratio,
@@ -86,7 +70,6 @@ impl TryFrom<FrameOptions> for FrameConfig {
             opts.corner_radius,
             margins,
             position,
-            upscale,
         ))
     }
 }
@@ -104,7 +87,6 @@ mod tests {
             corner_radius: Some(5),
             margins: Some("10px".to_string()),
             position: Some("center".to_string()),
-            upscale: Some("200px,200px".to_string()),
         };
 
         let config = FrameConfig::try_from(opts).unwrap();
@@ -121,15 +103,7 @@ mod tests {
             ),
             (10, 10, 10, 10, &Unit::Pixel)
         );
-        assert_eq!(
-            config.position().as_ref().unwrap(),
-            &RelativePosition::default()
-        );
-        assert!(config.upscale().is_some());
-        let upscale = config.upscale().as_ref().unwrap();
-        assert_eq!(upscale.width(), 200);
-        assert_eq!(upscale.height(), 200);
-        assert_eq!(upscale.unit(), &Unit::Pixel);
+        assert_eq!(config.position(), &RelativePosition::default());
     }
 
     #[test]
@@ -140,7 +114,6 @@ mod tests {
             corner_radius: None,
             margins: None,
             position: None,
-            upscale: None,
         };
 
         let config = FrameConfig::try_from(opts).unwrap();
@@ -157,7 +130,6 @@ mod tests {
             ),
             (5, 5, 5, 5, &Unit::Percent)
         );
-        assert!(config.position().is_none());
-        assert!(config.upscale().is_none());
+        assert_eq!(config.position(), &RelativePosition::default());
     }
 }

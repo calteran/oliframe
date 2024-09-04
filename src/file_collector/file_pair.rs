@@ -28,6 +28,11 @@ impl FilePair {
             output_path,
         }
     }
+
+    /// Split the file pair into its parts.
+    pub fn into_parts(self) -> (PathBuf, PathBuf) {
+        (self.input_path, self.output_path)
+    }
 }
 
 /// Determine the output filename for the given input path and output configuration.
