@@ -82,11 +82,9 @@ mod tests {
             "-c",
             "white",
             "-m",
-            "10px,20px",
+            "10,20",
             "-P",
             "top-left",
-            "-u",
-            "200%",
         ];
         let args = Cli::parse_from(opts);
         let config = Config::try_from(args).unwrap();

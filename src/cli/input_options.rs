@@ -64,7 +64,7 @@ mod tests {
             extensions: vec!["jpg".into()],
         };
 
-        let config = InputConfig::from(opts);
+        let config = InputConfig::try_from(opts).expect("Failed to parse input options.");
 
         assert_eq!(config.extensions(), &["jpg"]);
         assert_eq!(config.inputs(), &[PathBuf::from("input.jpg")]);

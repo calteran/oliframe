@@ -1,91 +1,97 @@
 //! Margins module.
 use crate::errors::OliframeError;
-use crate::geometry::{Size, Unit};
-use derive_getters::{Dissolve, Getters};
+use crate::geometry::border::Border;
+use crate::geometry::Size;
+use derive_getters::Getters;
 use std::str::FromStr;
 
-/// Margins define the space around an image.
+/// Margins define the relative space around an image, proportionate to the size of the image.
 ///
 /// The user can specify the width of the margins on each side
 /// of the image in pixels (px) or percentage (%).
-#[derive(Clone, Debug, Dissolve, Getters)]
+#[derive(Clone, Debug, Getters)]
 pub struct Margins {
-    top: u32,
-    right: u32,
-    bottom: u32,
-    left: u32,
-    unit: Unit,
+    values: Vec<f32>,
 }
 
 impl Margins {
-    pub fn for_size(&self, size: &Size) -> Margins {
-        match self.unit() {
-            Unit::Pixel => self.clone(),
-            Unit::Percent => {
-                let (width, height) = size.dimensions();
-                let top = (self.top() as f32 / 100.0 * height as f32).round() as u32;
-                let right = (self.right() as f32 / 100.0 * width as f32).round() as u32;
-                let bottom = (self.bottom() as f32 / 100.0 * height as f32).round() as u32;
-                let left = (self.left() as f32 / 100.0 * width as f32).round() as u32;
-                Margins {
-                    top,
-                    right,
-                    bottom,
-                    left,
-                    unit: Unit::Pixel,
-                }
+    pub fn to_border_with_size(&self, size: &Size) -> Border {
+        match self.values.len() {
+            1 => {
+                let side = (self.values[0] * (size.width() + size.height()) as f32 / 2.) as u32;
+                Border::new(side, side, side, side)
             }
+            2 => {
+                let vertical = (self.values[0] * size.height() as f32) as u32;
+                let horizontal = (self.values[1] * size.width() as f32) as u32;
+                Border::new(vertical, horizontal, vertical, horizontal)
+            }
+            3 => {
+                let top = (self.values[0] * size.height() as f32) as u32;
+                let side = (self.values[1] * size.width() as f32) as u32;
+                let bottom = (self.values[2] * size.height() as f32) as u32;
+                Border::new(top, side, bottom, side)
+            }
+            4 => {
+                let top = (self.values[0] * size.height() as f32) as u32;
+                let right = (self.values[1] * size.width() as f32) as u32;
+                let bottom = (self.values[2] * size.height() as f32) as u32;
+                let left = (self.values[3] * size.width() as f32) as u32;
+                Border::new(top, right, bottom, left)
+            }
+            _ => unreachable!("Invalid number of margin values."),
         }
+    }
+
+    fn try_new(values: Vec<f32>) -> Result<Self, OliframeError> {
+        let len = values.len();
+        if len < 1 || len > 4 {
+            return Err(OliframeError::InvalidInput(format!(
+                "Margins must be specified with 1-4 positive values (received {} values).",
+                len
+            )));
+        }
+
+        let values = values
+            .into_iter()
+            .map(|v| if v > 1. { v / 100. } else { v })
+            .map(|v| {
+                if v < 0. {
+                    return Err(OliframeError::InvalidInput(
+                        "Negative margin values are not allowed.".to_string(),
+                    ));
+                }
+                Ok(v)
+            })
+            .collect::<Result<Vec<f32>, OliframeError>>()?;
+
+        Ok(Margins { values })
     }
 }
 
 impl Default for Margins {
     fn default() -> Self {
-        Self {
-            top: 5,
-            right: 5,
-            bottom: 5,
-            left: 5,
-            unit: Unit::Percent,
-        }
+        Margins::try_new(vec![5.]).expect("Failed to create default Margins.")
     }
 }
 
 impl FromStr for Margins {
     type Err = OliframeError;
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let (values, unit) = super::parse_values_and_units(s).map_err(|e| match e {
-            super::ParseError::InvalidValue => OliframeError::InvalidInput(
-                "Please provide a positive whole number for the margin value.".to_string(),
-            ),
-            super::ParseError::InvalidUnit => OliframeError::InvalidInput(
-                "Please provide a valid unit for the margin value.".to_string(),
-            ),
-            super::ParseError::UnitConflict => OliframeError::InvalidInput(
-                "All margin values must have the same unit.".to_string(),
-            ),
-        })?;
+    fn from_str(input: &str) -> Result<Self, Self::Err> {
+        let re = regex::Regex::new(r"(?P<value>-?\d*\.?\d+)").expect("Invalid regex");
+        let values = re
+            .captures_iter(input)
+            .map(|caps| {
+                caps.name("value")
+                    .expect("Expected value not found.")
+                    .as_str()
+                    .parse::<f32>()
+                    .map_err(|_| OliframeError::InvalidInput("Invalid margin value.".to_string()))
+            })
+            .collect::<Result<Vec<f32>, OliframeError>>()?;
 
-        let (top, right, bottom, left) = match values.len() {
-            1 => (values[0], values[0], values[0], values[0]),
-            2 => (values[0], values[1], values[0], values[1]),
-            3 => (values[0], values[1], values[2], values[1]),
-            4 => (values[0], values[1], values[2], values[3]),
-            _ => {
-                return Err(OliframeError::InvalidInput(
-                    "Please provide one, two, three, or four margin values.".to_string(),
-                ))
-            }
-        };
-
-        Ok(Self {
-            top,
-            right,
-            bottom,
-            left,
-            unit: unit.unwrap_or(Unit::Percent),
-        })
+        Margins::try_new(values)
     }
 }
 
@@ -94,125 +100,41 @@ mod tests {
     use super::*;
 
     #[test]
-    fn parse_pixel_values_from_string() {
-        let one_value_margin = "10px".parse::<Margins>().unwrap();
-        assert_eq!(one_value_margin.top, 10);
-        assert_eq!(one_value_margin.right, 10);
-        assert_eq!(one_value_margin.bottom, 10);
-        assert_eq!(one_value_margin.left, 10);
-        assert_eq!(one_value_margin.unit, Unit::Pixel);
-
-        let two_value_margin = "10px,20px".parse::<Margins>().unwrap();
-        assert_eq!(two_value_margin.top, 10);
-        assert_eq!(two_value_margin.right, 20);
-        assert_eq!(two_value_margin.bottom, 10);
-        assert_eq!(two_value_margin.left, 20);
-        assert_eq!(two_value_margin.unit, Unit::Pixel);
-
-        let three_value_margin = "10px,20px,30px".parse::<Margins>().unwrap();
-        assert_eq!(three_value_margin.top, 10);
-        assert_eq!(three_value_margin.right, 20);
-        assert_eq!(three_value_margin.bottom, 30);
-        assert_eq!(three_value_margin.left, 20);
-        assert_eq!(three_value_margin.unit, Unit::Pixel);
-
-        let four_value_margin = "10px,20px,30px,40px".parse::<Margins>().unwrap();
-        assert_eq!(four_value_margin.top, 10);
-        assert_eq!(four_value_margin.right, 20);
-        assert_eq!(four_value_margin.bottom, 30);
-        assert_eq!(four_value_margin.left, 40);
-        assert_eq!(four_value_margin.unit, Unit::Pixel);
+    fn default_margins() {
+        let margins = Margins::default();
+        assert_eq!(margins.values(), &[0.05]);
     }
 
     #[test]
-    fn parse_percent_values_from_string() {
-        let one_value_margin = "10%".parse::<Margins>().unwrap();
-        assert_eq!(one_value_margin.top, 10);
-        assert_eq!(one_value_margin.right, 10);
-        assert_eq!(one_value_margin.bottom, 10);
-        assert_eq!(one_value_margin.left, 10);
-        assert_eq!(one_value_margin.unit, Unit::Percent);
+    fn margins_from_str() {
+        let margins = Margins::from_str("10").unwrap();
+        assert_eq!(margins.values(), &[0.1]);
 
-        let two_value_margin = "10%,20%".parse::<Margins>().unwrap();
-        assert_eq!(two_value_margin.top, 10);
-        assert_eq!(two_value_margin.right, 20);
-        assert_eq!(two_value_margin.bottom, 10);
-        assert_eq!(two_value_margin.left, 20);
-        assert_eq!(two_value_margin.unit, Unit::Percent);
+        let margins = Margins::from_str("10 20").unwrap();
+        assert_eq!(margins.values(), &[0.1, 0.2]);
 
-        let three_value_margin = "10%,20%,30%".parse::<Margins>().unwrap();
-        assert_eq!(three_value_margin.top, 10);
-        assert_eq!(three_value_margin.right, 20);
-        assert_eq!(three_value_margin.bottom, 30);
-        assert_eq!(three_value_margin.left, 20);
-        assert_eq!(three_value_margin.unit, Unit::Percent);
+        let margins = Margins::from_str("10 20 30").unwrap();
+        assert_eq!(margins.values(), &[0.1, 0.2, 0.3]);
 
-        let four_value_margin = "10%,20%,30%,40%".parse::<Margins>().unwrap();
-        assert_eq!(four_value_margin.top, 10);
-        assert_eq!(four_value_margin.right, 20);
-        assert_eq!(four_value_margin.bottom, 30);
-        assert_eq!(four_value_margin.left, 40);
-        assert_eq!(four_value_margin.unit, Unit::Percent);
+        let margins = Margins::from_str("10 20 30 40").unwrap();
+        assert_eq!(margins.values(), &[0.1, 0.2, 0.3, 0.4]);
     }
 
     #[test]
-    fn parse_unitless_values_from_string_as_percent() {
-        let one_value_margin = "10".parse::<Margins>().unwrap();
-        assert_eq!(one_value_margin.top, 10);
-        assert_eq!(one_value_margin.right, 10);
-        assert_eq!(one_value_margin.bottom, 10);
-        assert_eq!(one_value_margin.left, 10);
-        assert_eq!(one_value_margin.unit, Unit::Percent);
-
-        let two_value_margin = "10,20".parse::<Margins>().unwrap();
-        assert_eq!(two_value_margin.top, 10);
-        assert_eq!(two_value_margin.right, 20);
-        assert_eq!(two_value_margin.bottom, 10);
-        assert_eq!(two_value_margin.left, 20);
-        assert_eq!(two_value_margin.unit, Unit::Percent);
-
-        let three_value_margin = "10,20,30".parse::<Margins>().unwrap();
-        assert_eq!(three_value_margin.top, 10);
-        assert_eq!(three_value_margin.right, 20);
-        assert_eq!(three_value_margin.bottom, 30);
-        assert_eq!(three_value_margin.left, 20);
-        assert_eq!(three_value_margin.unit, Unit::Percent);
-
-        let four_value_margin = "10,20,30,40".parse::<Margins>().unwrap();
-        assert_eq!(four_value_margin.top, 10);
-        assert_eq!(four_value_margin.right, 20);
-        assert_eq!(four_value_margin.bottom, 30);
-        assert_eq!(four_value_margin.left, 40);
-        assert_eq!(four_value_margin.unit, Unit::Percent);
+    fn too_many_margin_values_is_err() {
+        let margins = Margins::from_str("10 20 30 40 50");
+        assert!(margins.is_err());
     }
 
     #[test]
-    fn mixed_unit_values_are_invalid() {
-        let mixed_units = "10px,20%,30px".parse::<Margins>();
-        assert!(mixed_units.is_err());
-        assert_eq!(
-            mixed_units.unwrap_err().to_string(),
-            "Invalid input: All margin values must have the same unit."
-        );
+    fn negative_margin_values_is_err() {
+        let margins = Margins::from_str("-10");
+        assert!(margins.is_err());
     }
 
     #[test]
-    fn decimal_values_are_invalid() {
-        let decimal_values = "10.5,20.5,30.5,40.5".parse::<Margins>();
-        assert!(decimal_values.is_err());
-        assert_eq!(
-            decimal_values.unwrap_err().to_string(),
-            "Invalid input: Please provide a positive whole number for the margin value."
-        );
-    }
-
-    #[test]
-    fn negative_values_are_invalid() {
-        let negative_values = "-10,-20,-30,-40".parse::<Margins>();
-        assert!(negative_values.is_err());
-        assert_eq!(
-            negative_values.unwrap_err().to_string(),
-            "Invalid input: Please provide a positive whole number for the margin value."
-        );
+    fn zero_margin_values_is_err() {
+        let margins = Margins::from_str("no numeric values here");
+        assert!(margins.is_err());
     }
 }

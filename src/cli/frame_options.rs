@@ -25,7 +25,7 @@ pub struct FrameOptions {
     #[arg(short = 'r', long = "radius", value_name = "RADIUS")]
     corner_radius: Option<u32>,
 
-    /// Margin around the image, in pixels (px) or percentage (%).
+    /// Relative margin around the image.
     /// Provide one, two, three, or four values to specify different widths for each side.
     #[arg(short = 'm', long, value_name = "SIZE(S)")]
     margins: Option<String>,
@@ -77,7 +77,6 @@ impl TryFrom<FrameOptions> for FrameConfig {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::geometry::Unit;
 
     #[test]
     fn parse_frame_options() {
@@ -85,7 +84,7 @@ mod tests {
             aspect_ratio: Some("16:9".to_string()),
             color: "black".to_string(),
             corner_radius: Some(5),
-            margins: Some("10px".to_string()),
+            margins: Some("10".to_string()),
             position: Some("center".to_string()),
         };
 
@@ -93,16 +92,7 @@ mod tests {
         assert_eq!(config.aspect_ratio().as_ref().unwrap().inner(), 16.0 / 9.0);
         assert_eq!(config.color(), &Rgba([0, 0, 0, 255]));
         assert_eq!(config.corner_radius(), &Some(5));
-        assert_eq!(
-            (
-                config.margins().top(),
-                config.margins().right(),
-                config.margins().bottom(),
-                config.margins().left(),
-                config.margins().unit()
-            ),
-            (10, 10, 10, 10, &Unit::Pixel)
-        );
+        assert_eq!(config.margins().values(), &[0.1]);
         assert_eq!(config.position(), &RelativePosition::default());
     }
 
@@ -120,16 +110,7 @@ mod tests {
         assert!(config.aspect_ratio().is_none());
         assert_eq!(config.color(), &Rgba([255, 255, 255, 255]));
         assert!(config.corner_radius().is_none());
-        assert_eq!(
-            (
-                config.margins().top(),
-                config.margins().right(),
-                config.margins().bottom(),
-                config.margins().left(),
-                config.margins().unit()
-            ),
-            (5, 5, 5, 5, &Unit::Percent)
-        );
+        assert_eq!(config.margins().values(), &[0.05]);
         assert_eq!(config.position(), &RelativePosition::default());
     }
 }

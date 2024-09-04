@@ -34,10 +34,10 @@ impl Frame {
     fn build(file_pair: FilePair, config: &FrameConfig) -> Result<Self, OliframeError> {
         let (img, fmt) = build::load(file_pair.input_path())?;
         let input_size = Size::from(img.dimensions());
-        let img_margins = config.margins().for_size(&input_size);
+        let border = config.margins().to_border_with_size(&input_size);
         let (_, output_path) = file_pair.into_parts();
-        let output_size = build::output_dimensions(&input_size, &img_margins, config);
-        let position = build::position(&input_size, &output_size, config.position(), &img_margins);
+        let output_size = build::output_dimensions(&input_size, &border, config);
+        let position = build::position(&input_size, &output_size, config.position(), &border);
 
         Ok(Self {
             img,
