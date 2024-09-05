@@ -46,7 +46,7 @@ impl TryFrom<Cli> for Config {
 
     fn try_from(cli: Cli) -> Result<Self, Self::Error> {
         Ok(Config::new(
-            cli.input_opts.try_into()?,
+            cli.input_opts.into(),
             cli.output_opts.into(),
             cli.frame_opts.try_into()?,
         ))
@@ -89,5 +89,20 @@ mod tests {
         let args = Cli::parse_from(opts);
         let config = Config::try_from(args).unwrap();
         assert_eq!(config.input_config().extensions(), &["jpg"]);
+    }
+
+    #[test]
+    fn verbosity_levels() {
+        let opts = vec!["oliframe", "-v"];
+        let args = Cli::parse_from(opts);
+        assert_eq!(args.verbosity().log_level(), log::LevelFilter::Debug);
+
+        let opts = vec!["oliframe", "-q"];
+        let args = Cli::parse_from(opts);
+        assert_eq!(args.verbosity().log_level(), log::LevelFilter::Error);
+
+        let opts = vec!["oliframe"];
+        let args = Cli::parse_from(opts);
+        assert_eq!(args.verbosity().log_level(), log::LevelFilter::Info);
     }
 }

@@ -44,14 +44,12 @@ fn authorize_overwrite(path: &PathBuf, overwrite: bool) -> bool {
 
     if overwrite {
         log::warn!("Overwriting existing file: {:?}", path);
-        true
-    } else {
-        log::warn!(
-            "File already exists: {:?}.  Run with --overwrite to replace it.",
-            path
-        );
-        false
+        return true;
     }
+
+    #[rustfmt::skip] // When the string is on its own line, tarpaulin thinks it's untested
+    log::warn!("File already exists: {:?}.  Run with --y to replace it.", path);
+    false
 }
 
 fn match_extensions(entry: &PathBuf, extensions: &[OsString]) -> bool {
@@ -62,5 +60,127 @@ fn match_extensions(entry: &PathBuf, extensions: &[OsString]) -> bool {
         extensions.iter().any(|e| e == ext)
     } else {
         false
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::config::FrameConfig;
+    use tempfile::TempDir;
+
+    #[test]
+    fn collect_files_recursively() {
+        let base_dir = TempDir::with_prefix(crate::test_utils::TEST_FS_PREFIX).unwrap();
+        let _file_handles = crate::test_utils::populate_test_directory(&base_dir);
+        let input_config = InputConfig::new(Vec::new(), vec![base_dir.path().to_path_buf()], true);
+        let output_config = OutputConfig::new(
+            false,
+            false,
+            Some(PathBuf::from("/output")),
+            false,
+            None,
+            None,
+        );
+        let config = Config::new(input_config, output_config, FrameConfig::default());
+
+        let file_pairs = FileCollector::collect(&config);
+        assert_ne!(file_pairs.len(), 0);
+        assert!(file_pairs
+            .iter()
+            .all(|file_pair| file_pair.input_path().exists()));
+        assert!(file_pairs
+            .iter()
+            .any(|file_pair| file_pair.input_path().parent() == Some(base_dir.path())));
+        assert!(file_pairs.iter().any(|file_pair| file_pair
+            .input_path()
+            .components()
+            .any(|c| c.as_os_str() == "samples")));
+    }
+
+    #[test]
+    fn collect_files_non_recursively() {
+        let base_dir = TempDir::with_prefix(crate::test_utils::TEST_FS_PREFIX).unwrap();
+        let _file_handles = crate::test_utils::populate_test_directory(&base_dir);
+        let input_config = InputConfig::new(Vec::new(), vec![base_dir.path().to_path_buf()], false);
+        let output_config = OutputConfig::new(
+            false,
+            false,
+            Some(PathBuf::from("/output")),
+            false,
+            None,
+            None,
+        );
+        let config = Config::new(input_config, output_config, FrameConfig::default());
+
+        let file_pairs = FileCollector::collect(&config);
+        assert_ne!(file_pairs.len(), 0);
+        assert!(file_pairs
+            .iter()
+            .all(|file_pair| file_pair.input_path().exists()));
+        assert!(file_pairs.iter().all(|file_pair| file_pair
+            .input_path()
+            .components()
+            .all(|c| c.as_os_str() != "samples")));
+    }
+
+    #[test]
+    fn overwrite_protection() {
+        let _ = env_logger::builder().is_test(true).try_init();
+        let base_dir = TempDir::with_prefix(crate::test_utils::TEST_FS_PREFIX).unwrap();
+        let _file_handles = crate::test_utils::populate_test_directory(&base_dir);
+        let input_config = InputConfig::new(Vec::new(), vec![base_dir.path().to_path_buf()], false);
+        let output_config_overwrite_prohibited =
+            OutputConfig::new(false, false, None, false, None, None);
+        let config = Config::new(
+            input_config.clone(),
+            output_config_overwrite_prohibited,
+            FrameConfig::default(),
+        );
+
+        let file_pairs = FileCollector::collect(&config);
+        assert_eq!(file_pairs.len(), 0);
+
+        let output_config_overwrite_allowed =
+            OutputConfig::new(false, false, None, true, None, None);
+        let config = Config::new(
+            input_config,
+            output_config_overwrite_allowed,
+            FrameConfig::default(),
+        );
+
+        let file_pairs = FileCollector::collect(&config);
+        assert_ne!(file_pairs.len(), 0);
+    }
+
+    #[test]
+    fn collect_extensions() {
+        let base_dir = TempDir::with_prefix(crate::test_utils::TEST_FS_PREFIX).unwrap();
+        let _file_handles = crate::test_utils::populate_test_directory(&base_dir);
+        let input_config = InputConfig::new(
+            vec![OsString::from("jpg"), OsString::from("png")],
+            vec![base_dir.path().to_path_buf()],
+            false,
+        );
+        let output_config = OutputConfig::new(
+            false,
+            false,
+            Some(PathBuf::from("/output")),
+            false,
+            None,
+            None,
+        );
+        let config = Config::new(input_config, output_config, FrameConfig::default());
+
+        let file_pairs = FileCollector::collect(&config);
+        assert_ne!(file_pairs.len(), 0);
+        assert!(file_pairs
+            .iter()
+            .all(|file_pair| file_pair.input_path().exists()));
+        assert!(file_pairs.iter().all(|file_pair| file_pair
+            .input_path()
+            .extension()
+            .map(|ext| ext == "jpg" || ext == "png")
+            .unwrap_or(false)));
     }
 }

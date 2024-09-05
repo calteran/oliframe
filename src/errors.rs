@@ -3,7 +3,7 @@
 use std::path::PathBuf;
 
 /// Standard error type for the oliframe crate.
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, thiserror::Error, PartialEq)]
 pub enum OliframeError {
     #[error("Unable to open image file at: {0}")]
     ImageUnreadable(PathBuf),

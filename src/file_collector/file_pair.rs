@@ -33,6 +33,15 @@ impl FilePair {
     pub fn into_parts(self) -> (PathBuf, PathBuf) {
         (self.input_path, self.output_path)
     }
+
+    #[cfg(test)]
+    /// Create a new file pair for testing purposes.
+    pub fn new(input_path: PathBuf, output_path: PathBuf) -> Self {
+        Self {
+            input_path,
+            output_path,
+        }
+    }
 }
 
 /// Determine the output filename for the given input path and output configuration.
@@ -64,11 +73,68 @@ fn output_path(
         .as_ref()
         .map(|root| {
             if output_config.flatten() {
-                root.clone()
+                root.join(&filename)
             } else {
-                root.join(relative_path)
+                root.join(relative_path).with_file_name(&filename)
             }
         })
-        .unwrap_or_else(|| input_path.to_path_buf())
-        .with_file_name(filename)
+        .unwrap_or_else(|| input_path.with_file_name(filename))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn build_paths() {
+        let base_path = PathBuf::from("/base");
+        let input_path = PathBuf::from("/base/input/file.txt");
+        let output_config = OutputConfig::default();
+        let file_pair = FilePair::build(&base_path, input_path.clone(), &output_config);
+        assert_eq!(file_pair.input_path, input_path);
+        assert_eq!(file_pair.output_path, input_path);
+
+        let output_config = OutputConfig::new(
+            false,
+            false,
+            Some(PathBuf::from("/output")),
+            false,
+            Some("prefix".to_string()),
+            Some("suffix".to_string()),
+        );
+        let file_pair = FilePair::build(&base_path, input_path.clone(), &output_config);
+        assert_eq!(file_pair.input_path, input_path);
+        assert_eq!(
+            file_pair.output_path,
+            PathBuf::from("/output/input/prefixfilesuffix.txt")
+        );
+
+        let output_config = OutputConfig::new(
+            false,
+            true,
+            Some(PathBuf::from("/output")),
+            false,
+            Some("prefix".to_string()),
+            Some("suffix".to_string()),
+        );
+        let file_pair = FilePair::build(&base_path, input_path.clone(), &output_config);
+        assert_eq!(file_pair.input_path, input_path);
+        assert_eq!(
+            file_pair.output_path,
+            PathBuf::from("/output/prefixfilesuffix.txt")
+        );
+    }
+
+    #[test]
+    fn pair_into_parts() {
+        let input_path = PathBuf::from("/base/input/file.txt");
+        let output_path = PathBuf::from("/output/input/file.txt");
+        let file_pair = FilePair {
+            input_path,
+            output_path,
+        };
+        let (input, output) = file_pair.into_parts();
+        assert_eq!(input, PathBuf::from("/base/input/file.txt"));
+        assert_eq!(output, PathBuf::from("/output/input/file.txt"));
+    }
 }

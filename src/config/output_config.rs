@@ -3,7 +3,7 @@ use derive_getters::Getters;
 use std::path::PathBuf;
 
 /// Output configuration parameters.
-#[derive(Debug, Default, Getters)]
+#[derive(Clone, Debug, Default, Getters)]
 pub struct OutputConfig {
     dry_run: bool,
     flatten: bool,

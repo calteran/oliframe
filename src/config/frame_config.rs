@@ -1,7 +1,9 @@
 //! Frame configuration.
+
 use crate::geometry::{AspectRatio, Margins, RelativePosition};
 use derive_getters::Getters;
 use image::Rgba;
+use std::fmt::Debug;
 
 /// Configuration parameters for the frame.
 #[derive(Debug, Getters)]
@@ -28,6 +30,18 @@ impl FrameConfig {
             corner_radius,
             margins,
             position,
+        }
+    }
+}
+
+impl Default for FrameConfig {
+    fn default() -> Self {
+        Self {
+            aspect_ratio: None,
+            color: Rgba([255, 255, 255, 255]),
+            corner_radius: None,
+            margins: Margins::default(),
+            position: RelativePosition::default(),
         }
     }
 }

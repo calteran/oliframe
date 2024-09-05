@@ -137,4 +137,36 @@ mod tests {
         let margins = Margins::from_str("no numeric values here");
         assert!(margins.is_err());
     }
+
+    #[test]
+    fn margins_to_border() {
+        let margins = Margins::from_str("10").unwrap();
+        let size = Size::new(100, 200);
+        let border = margins.to_border_with_size(&size);
+        assert_eq!(border.top(), 15);
+        assert_eq!(border.right(), 15);
+        assert_eq!(border.bottom(), 15);
+        assert_eq!(border.left(), 15);
+
+        let margins = Margins::from_str("10 20").unwrap();
+        let border = margins.to_border_with_size(&size);
+        assert_eq!(border.top(), 20);
+        assert_eq!(border.right(), 20);
+        assert_eq!(border.bottom(), 20);
+        assert_eq!(border.left(), 20);
+
+        let margins = Margins::from_str("10 20 30").unwrap();
+        let border = margins.to_border_with_size(&size);
+        assert_eq!(border.top(), 20);
+        assert_eq!(border.right(), 20);
+        assert_eq!(border.bottom(), 60);
+        assert_eq!(border.left(), 20);
+
+        let margins = Margins::from_str("10 20 30 40").unwrap();
+        let border = margins.to_border_with_size(&size);
+        assert_eq!(border.top(), 20);
+        assert_eq!(border.right(), 20);
+        assert_eq!(border.bottom(), 60);
+        assert_eq!(border.left(), 40);
+    }
 }

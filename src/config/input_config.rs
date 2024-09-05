@@ -5,7 +5,7 @@ use std::ffi::OsString;
 use std::path::PathBuf;
 
 /// Input configuration parameters.
-#[derive(Debug, Default, Getters)]
+#[derive(Clone, Debug, Default, Getters)]
 pub struct InputConfig {
     extensions: Vec<OsString>,
     inputs: Vec<PathBuf>,

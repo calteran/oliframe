@@ -1,6 +1,6 @@
 use derive_getters::Getters;
 
-#[derive(Debug, Getters)]
+#[derive(Debug, Getters, PartialEq)]
 pub struct Point {
     x: u32,
     y: u32,

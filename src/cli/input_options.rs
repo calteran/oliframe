@@ -1,7 +1,6 @@
 //! Input options
 
 use crate::config::InputConfig;
-use crate::errors::OliframeError;
 use clap::Args;
 use derive_getters::Getters;
 use std::ffi::OsString;
@@ -23,10 +22,8 @@ pub struct InputOptions {
     extensions: Vec<String>,
 }
 
-impl TryFrom<InputOptions> for InputConfig {
-    type Error = OliframeError;
-
-    fn try_from(opts: InputOptions) -> Result<Self, Self::Error> {
+impl From<InputOptions> for InputConfig {
+    fn from(opts: InputOptions) -> Self {
         let extensions = opts
             .extensions()
             .into_iter()
@@ -34,20 +31,12 @@ impl TryFrom<InputOptions> for InputConfig {
             .collect();
 
         let inputs = if opts.inputs.is_empty() {
-            match std::env::current_dir() {
-                Ok(dir) => vec![dir],
-                Err(e) => {
-                    return Err(OliframeError::InvalidInput(format!(
-                        "No input(s) specified and unable to determine current directory: {}",
-                        e
-                    )))
-                }
-            }
+            vec![std::env::current_dir().expect("Failed to determine current directory.")]
         } else {
             opts.inputs
         };
 
-        Ok(InputConfig::new(extensions, inputs, opts.recursive))
+        InputConfig::new(extensions, inputs, opts.recursive)
     }
 }
 
@@ -64,10 +53,28 @@ mod tests {
             extensions: vec!["jpg".into()],
         };
 
-        let config = InputConfig::try_from(opts).expect("Failed to parse input options.");
+        let config = InputConfig::from(opts);
 
         assert_eq!(config.extensions(), &["jpg"]);
         assert_eq!(config.inputs(), &[PathBuf::from("input.jpg")]);
+        assert_eq!(config.recursive(), true);
+    }
+
+    #[test]
+    fn parse_input_options_no_inputs() {
+        let opts = InputOptions {
+            inputs: vec![],
+            recursive: true,
+            extensions: vec!["jpg".into()],
+        };
+
+        let config = InputConfig::from(opts);
+
+        assert_eq!(config.extensions(), &["jpg"]);
+        assert_eq!(
+            config.inputs(),
+            &[std::env::current_dir().expect("Failed to determine current directory.")]
+        );
         assert_eq!(config.recursive(), true);
     }
 }

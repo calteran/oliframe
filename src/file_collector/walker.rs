@@ -22,3 +22,46 @@ fn is_hidden(entry: &DirEntry) -> bool {
         .map(|s| s.starts_with("."))
         .unwrap_or(false)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::fs::File;
+    use std::io::Write;
+    use tempfile::TempDir;
+
+    #[test]
+    fn file_walker() {
+        let tempdir = TempDir::with_prefix("file_walker").unwrap();
+        let base_path = tempdir.path().to_owned();
+        let _ = vec!["file1.txt", "file2.txt", "file3", ".im_hidden"]
+            .into_iter()
+            .map(|f| {
+                File::create(base_path.join(f))
+                    .unwrap()
+                    .write_all(&1234_u32.to_be_bytes())
+                    .unwrap()
+            })
+            .collect::<Vec<_>>();
+        let inner_dir = TempDir::with_prefix_in("inner_dir", &base_path).unwrap();
+        let _ = vec!["file4.txt", "file5.txt"]
+            .into_iter()
+            .map(|f| {
+                File::create(inner_dir.path().join(f))
+                    .unwrap()
+                    .write_all(&1234_u32.to_be_bytes())
+                    .unwrap()
+            })
+            .collect::<Vec<_>>();
+        let walker = path_walker(&base_path, true);
+
+        let paths: Vec<PathBuf> = walker.collect();
+        assert_eq!(paths.len(), 5);
+        assert!(paths.contains(&tempdir.path().join("file1.txt")));
+        assert!(paths.contains(&tempdir.path().join("file2.txt")));
+        assert!(paths.contains(&tempdir.path().join("file3")));
+        assert!(paths.contains(&inner_dir.path().join("file4.txt")));
+        assert!(paths.contains(&inner_dir.path().join("file5.txt")));
+        assert!(!paths.contains(&tempdir.path().join(".im_hidden")));
+    }
+}

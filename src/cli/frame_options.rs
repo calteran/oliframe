@@ -113,4 +113,22 @@ mod tests {
         assert_eq!(config.margins().values(), &[0.05]);
         assert_eq!(config.position(), &RelativePosition::default());
     }
+
+    #[test]
+    fn parsing_with_invalid_color_fails() {
+        let opts = FrameOptions {
+            aspect_ratio: None,
+            color: "invalid".to_string(),
+            corner_radius: None,
+            margins: None,
+            position: None,
+        };
+
+        let result = FrameConfig::try_from(opts);
+        assert!(result.is_err());
+        assert_eq!(
+            result.unwrap_err().to_string(),
+            "Invalid input: Invalid color."
+        );
+    }
 }

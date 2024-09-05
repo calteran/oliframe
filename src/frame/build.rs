@@ -66,3 +66,130 @@ pub fn size_with_ratio(img_size: &Size, aspect_ratio: &AspectRatio, border: &Bor
         Size::from((new_width, new_height))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use image::Rgba;
+    use std::str::FromStr;
+    use tempfile::Builder;
+
+    #[test]
+    fn load_known_image() {
+        let image_file = PathBuf::from("samples/sample00.jpg");
+        let result = load(&image_file);
+        assert!(result.is_ok());
+        let (_, fmt) = result.unwrap();
+        assert_eq!(fmt, ImageFormat::Jpeg);
+    }
+
+    #[test]
+    fn invalid_image_wont_load() {
+        let not_an_image_file = PathBuf::from("Cargo.toml");
+        let result = load(&not_an_image_file);
+        assert!(result.is_err());
+        assert_eq!(
+            result.err().unwrap(),
+            OliframeError::ImageUnreadable(not_an_image_file)
+        );
+    }
+
+    #[test]
+    fn handle_unreadable_image() {
+        let temp_img = Builder::new().suffix(".jpg").tempfile().unwrap();
+        let result = load(&temp_img.path().to_path_buf());
+        assert!(result.is_err());
+        assert_eq!(
+            result.err().unwrap(),
+            OliframeError::ImageUnreadable(temp_img.path().to_path_buf())
+        );
+    }
+
+    #[test]
+    fn output_dimensions_with_border() {
+        let input_size = Size::from((100, 100));
+        let border = Margins::from_str("10")
+            .unwrap()
+            .to_border_with_size(&input_size);
+        let config = FrameConfig::default();
+        let output_size = output_dimensions(&input_size, &border, &config);
+        assert_eq!(output_size, Size::from((120, 120)));
+    }
+
+    #[test]
+    fn output_dimensions_with_tall_ar() {
+        let input_size = Size::from((100, 100));
+        let margins = Margins::from_str("10").unwrap();
+        let border = margins.to_border_with_size(&input_size);
+        let config = FrameConfig::new(
+            Some(AspectRatio::from_str("9:16").unwrap()),
+            Rgba([0, 0, 0, 0]),
+            None,
+            margins,
+            RelativePosition::default(),
+        );
+        let output_size = output_dimensions(&input_size, &border, &config);
+        assert_eq!(output_size, Size::from((68, 120)));
+    }
+
+    #[test]
+    fn output_dimensions_with_wide_ar() {
+        let input_size = Size::from((100, 100));
+        let margins = Margins::from_str("10").unwrap();
+        let border = margins.to_border_with_size(&input_size);
+        let config = FrameConfig::new(
+            Some(AspectRatio::from_str("16:9").unwrap()),
+            Rgba([0, 0, 0, 0]),
+            None,
+            margins,
+            RelativePosition::default(),
+        );
+        let output_size = output_dimensions(&input_size, &border, &config);
+        assert_eq!(output_size, Size::from((120, 68)));
+    }
+
+    #[test]
+    fn position_in_frame() {
+        let img_size = Size::from((100, 100));
+        let output_size = Size::from((200, 200));
+        let border = Margins::from_str("10")
+            .unwrap()
+            .to_border_with_size(&img_size);
+
+        let relative_position = RelativePosition::from_str("center").unwrap();
+        let pos = position(&img_size, &output_size, &relative_position, &border);
+        assert_eq!(pos, Point::new(50, 50));
+
+        let relative_position = RelativePosition::from_str("left,top").unwrap();
+        let pos = position(&img_size, &output_size, &relative_position, &border);
+        assert_eq!(pos, Point::new(10, 10));
+
+        let relative_position = RelativePosition::from_str("right,bottom").unwrap();
+        let pos = position(&img_size, &output_size, &relative_position, &border);
+        assert_eq!(pos, Point::new(90, 90));
+
+        let relative_position = RelativePosition::from_str("left,bottom").unwrap();
+        let pos = position(&img_size, &output_size, &relative_position, &border);
+        assert_eq!(pos, Point::new(10, 90));
+
+        let relative_position = RelativePosition::from_str("right,top").unwrap();
+        let pos = position(&img_size, &output_size, &relative_position, &border);
+        assert_eq!(pos, Point::new(90, 10));
+
+        let relative_position = RelativePosition::from_str("center,bottom").unwrap();
+        let pos = position(&img_size, &output_size, &relative_position, &border);
+        assert_eq!(pos, Point::new(50, 90));
+
+        let relative_position = RelativePosition::from_str("center,top").unwrap();
+        let pos = position(&img_size, &output_size, &relative_position, &border);
+        assert_eq!(pos, Point::new(50, 10));
+
+        let relative_position = RelativePosition::from_str("left,center").unwrap();
+        let pos = position(&img_size, &output_size, &relative_position, &border);
+        assert_eq!(pos, Point::new(10, 50));
+
+        let relative_position = RelativePosition::from_str("right,center").unwrap();
+        let pos = position(&img_size, &output_size, &relative_position, &border);
+        assert_eq!(pos, Point::new(90, 50));
+    }
+}

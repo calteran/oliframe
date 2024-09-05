@@ -26,7 +26,10 @@ mod errors;
 mod file_collector;
 mod frame;
 mod geometry;
+#[cfg(test)]
+mod test_utils;
 
+#[cfg(not(tarpaulin_include))]
 fn main() {
     let args = Cli::parse();
 
