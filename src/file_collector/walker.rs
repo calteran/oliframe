@@ -32,8 +32,8 @@ mod tests {
 
     #[test]
     fn file_walker() {
-        let tempdir = TempDir::with_prefix("file_walker").unwrap();
-        let base_path = tempdir.path().to_owned();
+        let tmpdir = TempDir::with_prefix("file_walker").unwrap();
+        let base_path = tmpdir.path().to_owned();
         let _ = vec!["file1.txt", "file2.txt", "file3", ".im_hidden"]
             .into_iter()
             .map(|f| {
@@ -57,11 +57,11 @@ mod tests {
 
         let paths: Vec<PathBuf> = walker.collect();
         assert_eq!(paths.len(), 5);
-        assert!(paths.contains(&tempdir.path().join("file1.txt")));
-        assert!(paths.contains(&tempdir.path().join("file2.txt")));
-        assert!(paths.contains(&tempdir.path().join("file3")));
+        assert!(paths.contains(&tmpdir.path().join("file1.txt")));
+        assert!(paths.contains(&tmpdir.path().join("file2.txt")));
+        assert!(paths.contains(&tmpdir.path().join("file3")));
         assert!(paths.contains(&inner_dir.path().join("file4.txt")));
         assert!(paths.contains(&inner_dir.path().join("file5.txt")));
-        assert!(!paths.contains(&tempdir.path().join(".im_hidden")));
+        assert!(!paths.contains(&tmpdir.path().join(".im_hidden")));
     }
 }

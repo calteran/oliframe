@@ -135,6 +135,7 @@ mod tests {
         );
     }
 
+    //noinspection SpellCheckingInspection
     #[test]
     fn process_image_with_corner_radius() {
         let temp_dir = TempDir::with_prefix(TEST_FS_PREFIX).unwrap();

@@ -27,7 +27,7 @@ pub fn populate_test_directory(base_dir: &TempDir) -> Vec<NamedTempFile> {
             .prefix(TEST_FS_PREFIX)
             .tempfile_in(base_dir.path())
             .unwrap(),
-    ); // file without extension
+    ); // file without an extension
 
     handles.push(
         Builder::new()

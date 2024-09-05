@@ -85,6 +85,7 @@ fn output_path(
 mod tests {
     use super::*;
 
+    //noinspection SpellCheckingInspection
     #[test]
     fn build_paths() {
         let base_path = PathBuf::from("/base");

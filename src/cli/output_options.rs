@@ -27,7 +27,7 @@ pub struct OutputOptions {
     #[arg(short = 's', long, value_name = "SUFFIX")]
     suffix: Option<String>,
 
-    /// Overwrite existing file_collector.  If not specified, existing file_collector will not be overwritten.
+    /// Overwrite existing files.  Defaults to no.
     #[arg(short = 'y', long)]
     overwrite: bool,
 }
