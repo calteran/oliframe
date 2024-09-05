@@ -26,7 +26,7 @@ impl From<InputOptions> for InputConfig {
     fn from(opts: InputOptions) -> Self {
         let extensions = opts
             .extensions()
-            .into_iter()
+            .iter()
             .map(|ext| OsString::from(ext.trim_start_matches('.')))
             .collect();
 

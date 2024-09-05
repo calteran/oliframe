@@ -11,8 +11,11 @@ pub use output_config::OutputConfig;
 /// Program configuration
 #[derive(Debug, Getters)]
 pub struct Config {
+    /// Input configuration
     input_config: InputConfig,
+    /// Output configuration
     output_config: OutputConfig,
+    /// Frame configuration
     frame_config: FrameConfig,
 }
 

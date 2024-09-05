@@ -1,13 +1,20 @@
+//! The Pixel Source module is responsible
+//! for determining the source of a pixel during the frame drawing process.
 use crate::geometry::{Point, Size};
 
+/// The source of a pixel during the frame drawing process.
 #[derive(Debug, PartialEq)]
 pub enum PixelSource {
+    /// The pixel comes from the input image.
     Image,
+    /// The image is a blend of the input image and the background.
     Blend(f32),
+    /// The pixel comes from the background color.
     Background,
 }
 
 impl PixelSource {
+    /// Determine the source of a pixel based on its position and the image's corner radius.
     pub fn at(
         pixel: Point,
         img_position: &Point,
@@ -56,6 +63,7 @@ impl PixelSource {
     }
 }
 
+/// Determine if the given pixel is outside the image's border.
 fn is_border_pixel(pixel: &Point, img_position: &Point, img_size: &Size) -> bool {
     if pixel.x() < img_position.x() || pixel.x() >= img_position.x() + img_size.width() {
         return true;

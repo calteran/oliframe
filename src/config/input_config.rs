@@ -7,8 +7,11 @@ use std::path::PathBuf;
 /// Input configuration parameters.
 #[derive(Clone, Debug, Default, Getters)]
 pub struct InputConfig {
+    /// The file extensions to accept.
     extensions: Vec<OsString>,
+    /// A list of input files and directories.
     inputs: Vec<PathBuf>,
+    /// Whether to search for input files recursively.
     recursive: bool,
 }
 

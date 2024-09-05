@@ -8,13 +8,21 @@ use std::str::FromStr;
 /// Margins define the relative space around an image, proportionate to the size of the image.
 ///
 /// The user can specify the width of the margins on each side
-/// of the image in pixels (px) or percentage (%).
+/// of the image in percentage (%).
 #[derive(Clone, Debug, Getters)]
 pub struct Margins {
+    /// The values of the margins.
+    ///
+    /// There should be between one and four values.
+    /// - one value: all sides have the same margin.
+    /// - two values: top/bottom and left/right margins are the same.
+    /// - three values: top, left/right, and bottom margins are different.
+    /// - four values: top, right, bottom, and left margins are different.
     values: Vec<f32>,
 }
 
 impl Margins {
+    /// Given the size of a specific image, return the pixel-specific border that represents the margins.
     pub fn to_border_with_size(&self, size: &Size) -> Border {
         match self.values.len() {
             1 => {
@@ -43,9 +51,13 @@ impl Margins {
         }
     }
 
+    /// Create a new Margins instance with the given values,
+    /// ensuring that there are between one and four values.
+    ///
+    /// Values are converted to fractions if they are greater than 1.
     fn try_new(values: Vec<f32>) -> Result<Self, OliframeError> {
         let len = values.len();
-        if len < 1 || len > 4 {
+        if !(1..=4).contains(&len) {
             return Err(OliframeError::InvalidInput(format!(
                 "Margins must be specified with 1-4 positive values (received {} values).",
                 len

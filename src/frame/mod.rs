@@ -1,3 +1,4 @@
+//! The frame module is responsible for framing images based on configuration values.
 mod build;
 mod pixel_source;
 
@@ -11,17 +12,26 @@ use image::buffer::ConvertBuffer;
 use image::{DynamicImage, GenericImageView, ImageFormat, Pixel, RgbaImage};
 use std::path::PathBuf;
 
+/// A single image being processed.
 #[derive(Debug, Getters)]
 pub struct Frame {
+    /// The image being processed.
+    /// *Note*: this is changed from the input image to the output image during processing.
     img: DynamicImage,
+    /// The format of the image.
     fmt: ImageFormat,
+    /// The size of the input image.
     input_size: Size,
+    /// The path to save the output image.
     output_path: PathBuf,
+    /// The size of the output image.
     output_size: Size,
+    /// The location of the image's top-left corner within the frame.
     position: Point,
 }
 
 impl Frame {
+    /// Process the given image file pair with the given configuration.
     pub fn process(
         file_pair: FilePair,
         config: &FrameConfig,
@@ -31,6 +41,7 @@ impl Frame {
         Self::build(file_pair, config)?.draw(config).save(dry_run)
     }
 
+    /// Build a new frame from the given file pair and configuration.
     fn build(file_pair: FilePair, config: &FrameConfig) -> Result<Self, OliframeError> {
         let (img, fmt) = build::load(file_pair.input_path())?;
         let input_size = Size::from(img.dimensions());
@@ -49,6 +60,7 @@ impl Frame {
         })
     }
 
+    /// Draw the frame around the image.
     pub fn draw(mut self, config: &FrameConfig) -> Self {
         let output = RgbaImage::from_fn(
             self.output_size.width(),
@@ -83,6 +95,7 @@ impl Frame {
         self
     }
 
+    /// Save the image to the output path.
     fn save(&self, dry_run: bool) -> Result<(), OliframeError> {
         if dry_run {
             log::info!("Dry run: Would save image to {:?}", self.output_path());

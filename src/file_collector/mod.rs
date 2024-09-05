@@ -6,7 +6,7 @@ mod walker;
 use crate::config::{Config, InputConfig, OutputConfig};
 pub use file_pair::FilePair;
 use std::ffi::OsString;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 /// Struct responsible for building a list of input/output file paths
 #[derive(Debug)]
@@ -21,22 +21,24 @@ impl FileCollector {
             .iter()
             .flat_map(|base_path| collect_for_base_path(base_path, input_config, output_config))
             .filter(|file_pair| {
-                authorize_overwrite(&file_pair.output_path(), output_config.overwrite())
+                authorize_overwrite(file_pair.output_path(), output_config.overwrite())
             })
             .collect()
     }
 }
 
+/// Collect the file pairs for the given base path
 fn collect_for_base_path<'a>(
     base_path: &'a PathBuf,
     input_config: &'a InputConfig,
     output_config: &'a OutputConfig,
 ) -> impl Iterator<Item = FilePair> + 'a {
     walker::path_walker(base_path, input_config.recursive())
-        .filter(|file| match_extensions(file, &input_config.extensions()))
+        .filter(|file| match_extensions(file, input_config.extensions()))
         .map(|input_path| FilePair::build(base_path, input_path, output_config))
 }
 
+/// Authorize overwriting the file at the given path based on the overwrite flag
 fn authorize_overwrite(path: &PathBuf, overwrite: bool) -> bool {
     if !path.exists() {
         return true;
@@ -52,7 +54,8 @@ fn authorize_overwrite(path: &PathBuf, overwrite: bool) -> bool {
     false
 }
 
-fn match_extensions(entry: &PathBuf, extensions: &[OsString]) -> bool {
+/// Check if the file has one of the given extensions
+fn match_extensions(entry: &Path, extensions: &[OsString]) -> bool {
     if extensions.is_empty() {
         return true;
     }

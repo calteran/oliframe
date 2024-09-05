@@ -19,7 +19,7 @@ impl FilePair {
     pub fn build(base_path: &PathBuf, input_path: PathBuf, output_config: &OutputConfig) -> Self {
         let relative_path = input_path
             .strip_prefix(base_path)
-            .expect(format!("Failed to strip prefix: {:?}", input_path).as_str());
+            .unwrap_or_else(|_| panic!("Failed to strip prefix: {:?}", input_path));
         let output_filename = filename(&input_path, output_config);
         let output_path = output_path(output_config, &input_path, relative_path, output_filename);
 
@@ -45,7 +45,7 @@ impl FilePair {
 }
 
 /// Determine the output filename for the given input path and output configuration.
-fn filename(input_path: &PathBuf, output_config: &OutputConfig) -> OsString {
+fn filename(input_path: &Path, output_config: &OutputConfig) -> OsString {
     let mut filename = OsString::new();
     if let Some(prefix) = output_config.prefix() {
         filename.push(prefix);
@@ -64,7 +64,7 @@ fn filename(input_path: &PathBuf, output_config: &OutputConfig) -> OsString {
 /// Determine the output path for the given input path and output configuration.
 fn output_path(
     output_config: &OutputConfig,
-    input_path: &PathBuf,
+    input_path: &Path,
     relative_path: &Path,
     filename: OsString,
 ) -> PathBuf {

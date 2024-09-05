@@ -13,6 +13,7 @@ use std::str::FromStr;
 ///
 #[derive(Debug, Getters, PartialEq)]
 pub struct AspectRatio {
+    /// The aspect ratio value.
     inner: f32,
 }
 

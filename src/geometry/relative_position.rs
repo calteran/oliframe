@@ -13,7 +13,9 @@ use strum_macros::{AsRefStr, EnumIter, EnumString};
 ///
 #[derive(Debug, Default, Getters, PartialEq)]
 pub struct RelativePosition {
+    /// Horizontal position of the image.
     horizontal: HorizontalPosition,
+    /// Vertical position of the image.
     vertical: VerticalPosition,
 }
 
@@ -36,6 +38,7 @@ impl FromStr for RelativePosition {
     }
 }
 
+/// Extract the position from the given string.
 fn extract_position<P>(s: &str) -> Option<P>
 where
     P: FromStr + IntoEnumIterator + AsRef<str> + Default + PartialEq,
@@ -51,21 +54,29 @@ where
         .ok()
 }
 
+/// Horizontal position of an element in the final frame.
 #[derive(AsRefStr, Debug, Default, EnumIter, EnumString, PartialEq)]
 #[strum(serialize_all = "snake_case")]
 pub enum HorizontalPosition {
+    /// The element is positioned on the left side of the frame.
     Left,
+    /// The element is positioned in the center of the frame.
     #[default]
     Center,
+    /// The element is positioned on the right side of the frame.
     Right,
 }
 
+/// Vertical position of an element in the final frame.
 #[derive(AsRefStr, Debug, Default, EnumIter, EnumString, PartialEq)]
 #[strum(serialize_all = "snake_case")]
 pub enum VerticalPosition {
+    /// The element is positioned at the top of the frame.
     Top,
     #[default]
+    /// The element is positioned in the center of the frame.
     Center,
+    /// The element is positioned at the bottom of the frame.
     Bottom,
 }
 

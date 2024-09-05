@@ -8,10 +8,15 @@ use std::fmt::Debug;
 /// Configuration parameters for the frame.
 #[derive(Debug, Getters)]
 pub struct FrameConfig {
+    /// The desired aspect ratio of the final output image.
     aspect_ratio: Option<AspectRatio>,
+    /// The color of the frame around the image
     color: Rgba<u8>,
+    /// The radius of the frame's corners.
     corner_radius: Option<u32>,
+    /// The relative margins around the image.
     margins: Margins,
+    /// The relative position of the image within the frame.
     position: RelativePosition,
 }
 

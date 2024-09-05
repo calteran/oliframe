@@ -1,9 +1,11 @@
+//! Module containing helper functions for image processing.
 use crate::config::FrameConfig;
 use crate::errors::OliframeError;
 use crate::geometry::*;
 use image::{DynamicImage, ImageFormat, ImageReader};
 use std::path::PathBuf;
 
+/// Load an image from the given file path.
 pub fn load(image_file: &PathBuf) -> Result<(DynamicImage, ImageFormat), OliframeError> {
     let img = ImageReader::open(image_file)
         .map_err(|_| OliframeError::ImageUnreadable(image_file.to_path_buf()))?;
@@ -17,6 +19,7 @@ pub fn load(image_file: &PathBuf) -> Result<(DynamicImage, ImageFormat), Olifram
     Ok((img, fmt))
 }
 
+/// Calculate the dimensions of the output image.
 pub fn output_dimensions(input_size: &Size, border: &Border, config: &FrameConfig) -> Size {
     if let Some(aspect_ratio) = config.aspect_ratio() {
         size_with_ratio(input_size, aspect_ratio, border)
@@ -25,6 +28,7 @@ pub fn output_dimensions(input_size: &Size, border: &Border, config: &FrameConfi
     }
 }
 
+/// Calculate the position of the image within the output frame.
 pub fn position(
     img_size: &Size,
     output_size: &Size,
@@ -46,12 +50,14 @@ pub fn position(
     Point::new(x, y)
 }
 
+/// Calculate the size of the output image with a border.
 pub fn size_with_border(img_size: &Size, border: &Border) -> Size {
     let new_width = img_size.width() + border.left() + border.right();
     let new_height = img_size.height() + border.top() + border.bottom();
     Size::from((new_width, new_height))
 }
 
+/// Calculate the size of the output image with a given aspect ratio.
 pub fn size_with_ratio(img_size: &Size, aspect_ratio: &AspectRatio, border: &Border) -> Size {
     let (width, height) = img_size.dimensions();
     let img_ar = width as f32 / height as f32;
