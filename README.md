@@ -3,6 +3,7 @@
 [![oliframe](https://github.com/calteran/oliframe/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/calteran/oliframe/actions/workflows/ci.yml)
 [![crates.io](https://img.shields.io/crates/v/oliframe.svg)](https://crates.io/crates/oliframe)
 [![docs.rs](https://docs.rs/oliframe/badge.svg)](https://docs.rs/oliframe)
+[![codecov](https://codecov.io/github/calteran/oliframe/graph/badge.svg?token=8IWPNES6K2)](https://codecov.io/github/calteran/oliframe)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://calteran.mit-license.org/)
 
 **Oliframe** is a command-line tool written in [Rust](https://www.rust-lang.org) to add simple colored frames (borders)
