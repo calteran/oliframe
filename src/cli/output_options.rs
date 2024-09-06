@@ -63,10 +63,10 @@ mod tests {
 
         let config = OutputConfig::from(opts);
 
-        assert_eq!(config.dry_run(), true);
-        assert_eq!(config.flatten(), true);
+        assert!(config.dry_run());
+        assert!(config.flatten());
         assert_eq!(config.output_root(), &Some(PathBuf::from("output")));
-        assert_eq!(config.overwrite(), true);
+        assert!(config.overwrite());
         assert_eq!(config.prefix(), &Some("prefix".to_string()));
         assert_eq!(config.suffix(), &Some("suffix".to_string()));
     }

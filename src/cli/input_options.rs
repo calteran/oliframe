@@ -57,7 +57,7 @@ mod tests {
 
         assert_eq!(config.extensions(), &["jpg"]);
         assert_eq!(config.inputs(), &[PathBuf::from("input.jpg")]);
-        assert_eq!(config.recursive(), true);
+        assert!(config.recursive());
     }
 
     #[test]
@@ -75,6 +75,6 @@ mod tests {
             config.inputs(),
             &[std::env::current_dir().expect("Failed to determine current directory.")]
         );
-        assert_eq!(config.recursive(), true);
+        assert!(config.recursive());
     }
 }
