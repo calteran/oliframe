@@ -1,6 +1,5 @@
 //! Module responsible for walking directories to locate candidate input paths.
 
-use junk_file::is_not_junk;
 use std::path::{Path, PathBuf};
 use walkdir::{DirEntry, WalkDir};
 
@@ -9,7 +8,7 @@ pub fn path_walker(base_path: &Path, recursive: bool) -> impl Iterator<Item = Pa
     WalkDir::new(base_path)
         .max_depth(if recursive { usize::MAX } else { 1 })
         .into_iter()
-        .filter_entry(|e| !is_hidden(e) && is_not_junk(e.file_name()))
+        .filter_entry(|e| !is_hidden(e))
         .filter_map(|e| e.ok())
         .filter(|e| e.file_type().is_file())
         .map(|e| e.into_path())

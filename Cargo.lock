@@ -563,22 +563,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bc0000e42512c92e31c2252315bda326620a4e034105e900c98ec492fa077b3e"
 
 [[package]]
-name = "junk_file"
-version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8ddc03041ce7cc59cc83b1c220de74e75a576aab56260da832defd119093fe12"
-dependencies = [
- "lazy_static",
- "regex",
-]
-
-[[package]]
-name = "lazy_static"
-version = "1.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
-
-[[package]]
 name = "lebe"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -748,7 +732,6 @@ dependencies = [
  "env_logger",
  "fs_extra",
  "image",
- "junk_file",
  "log",
  "rayon",
  "regex",
