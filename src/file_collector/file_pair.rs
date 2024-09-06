@@ -19,7 +19,9 @@ impl FilePair {
     pub fn build(base_path: &PathBuf, input_path: PathBuf, output_config: &OutputConfig) -> Self {
         let relative_path = input_path
             .strip_prefix(base_path)
-            .unwrap_or_else(|_| panic!("Failed to strip prefix: {:?}", input_path));
+            .unwrap_or_else(|_| panic!("Failed to strip prefix: {:?}", input_path))
+            .parent()
+            .unwrap_or(Path::new(""));
         let output_filename = filename(&input_path, output_config);
         let output_path = output_path(output_config, &input_path, relative_path, output_filename);
 
@@ -75,26 +77,31 @@ fn output_path(
             if output_config.flatten() {
                 root.join(&filename)
             } else {
-                root.join(relative_path).with_file_name(&filename)
+                root.join(relative_path).join(&filename)
             }
         })
         .unwrap_or_else(|| input_path.with_file_name(filename))
 }
 
+//noinspection SpellCheckingInspection
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    //noinspection SpellCheckingInspection
     #[test]
-    fn build_paths() {
+    fn build_nested_output_path() {
         let base_path = PathBuf::from("/base");
         let input_path = PathBuf::from("/base/input/file.txt");
         let output_config = OutputConfig::default();
         let file_pair = FilePair::build(&base_path, input_path.clone(), &output_config);
         assert_eq!(file_pair.input_path, input_path);
         assert_eq!(file_pair.output_path, input_path);
+    }
 
+    #[test]
+    fn build_output_path_with_prefix_and_suffix() {
+        let base_path = PathBuf::from("/base");
+        let input_path = PathBuf::from("/base/input/file.txt");
         let output_config = OutputConfig::new(
             false,
             false,
@@ -109,7 +116,12 @@ mod tests {
             file_pair.output_path,
             PathBuf::from("/output/input/prefixfilesuffix.txt")
         );
+    }
 
+    #[test]
+    fn build_flattened_output_path() {
+        let base_path = PathBuf::from("/base");
+        let input_path = PathBuf::from("/base/input/file.txt");
         let output_config = OutputConfig::new(
             false,
             true,
@@ -123,6 +135,26 @@ mod tests {
         assert_eq!(
             file_pair.output_path,
             PathBuf::from("/output/prefixfilesuffix.txt")
+        );
+    }
+
+    #[test]
+    fn build_output_path_with_multiple_components() {
+        let base_path = PathBuf::from("/base");
+        let input_path = PathBuf::from("/base/input/file.txt");
+        let output_config = OutputConfig::new(
+            false,
+            false,
+            Some(PathBuf::from("/output/nested")),
+            false,
+            None,
+            None,
+        );
+        let file_pair = FilePair::build(&base_path, input_path.clone(), &output_config);
+        assert_eq!(file_pair.input_path, input_path);
+        assert_eq!(
+            file_pair.output_path,
+            PathBuf::from("/output/nested/input/file.txt")
         );
     }
 
