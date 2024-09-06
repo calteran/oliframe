@@ -21,7 +21,6 @@ pub struct FrameOptions {
     color: String,
 
     /// Add rounded corners to the image.
-    /// Specify the radius in pixels (px) or percentage (%).
     #[arg(short = 'r', long = "radius", value_name = "RADIUS")]
     corner_radius: Option<u32>,
 

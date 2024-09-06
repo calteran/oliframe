@@ -5,81 +5,89 @@
 [![docs.rs](https://docs.rs/oliframe/badge.svg)](https://docs.rs/oliframe)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://calteran.mit-license.org/)
 
-**oliframe** is a simple command line tool to add borders to images.  It can process a single image or multiple directories at a time.
+**Oliframe** is a command-line tool written in [Rust](https://www.rust-lang.org) to add simple colored frames (borders)
+around images.
+It is designed to efficiently batch process images with a consistent border style.
+Flexible options allow for customization of the border width, color, and corner radius.
+
+This project was inspired by the style of posts by [`@officialmumbo`](https://www.instagram.com/officialmumbo/) on
+Instagram, but is not endorsed by or affiliated with him.
 
 ## Installation
 
-### For command-line usage
 ```bash
-cargo install oliframe
+$ cargo install oliframe
 ```
 
-### For library usage
-While the purpose of this project is to provide a command-line tool,
-the underlying library can be used in other projects.
+## Usage
 
 ```bash
-cargo add oliframe
+$ oliframe --help
 ```
 
-## Command-Line Usage
+```text
+Usage: oliframe [OPTIONS]
 
-| Option                    | Description                                                                                                 |
-|---------------------------|-------------------------------------------------------------------------------------------------------------|
-| `-f`, `--file <FILENAME>` | One or more input files                                                                                     |
-| `-d`, `--dir <DIR>`       | Director(y/ies) to search for input files                                                                   |
-| `-R`, `--recursive`       | Recursively search for input files in the specified director(y/ies)                                         |
-| `-x`, `--extension <FMT>` | File extension(s) of input files to accept (must be exact match, ie: "jpg" != "jpeg" != "JPG")              |
-| `-o`, `--output <DEST>`   | Output destination                                                                                          |
-| `-p`, `--prefix <PREFIX>` | Prefix to prepend to output files                                                                           |
-| `-s`, `--suffix <SUFFIX>` | Suffix to append to output files                                                                            |
-| `-C`, `--pct <%WIDTH>`    | Border width in percent of average dimension, ie: (width + height) / 2.0. [default: 5]                      |
-| `-X`, `--px <PIXELS>`     | Border with in pixels, default is 0 (disabled)                                                              |
-| `-c`, `--color <COLOR>`   | Border color, any legal CSS color value [default: white]                                                    |
-| `-r`, `--radius <RADIUS>` | Border corner radius (in pixels; requires --px)                                                             |
-| `-v`, `--verbose`         | Verbose output                                                                                              |
-| `-q`, `--quiet`           | Quiet output -- suppresses all output except errors                                                         |
-| `--dry-run`               | Dry run (don't actually create output files)                                                                |
-| `-y`, `--overwrite`       | Overwrite existing files. Default is to ask for each image before overwriting if this flag is not specified |
-| `-h`, `--help`            | Print help                                                                                                  |
-| `-V`, `--version`         | Print version                                                                                               |
+Options:
+  -v, --verbose  Verbose output
+  -q, --quiet    Quiet output -- suppresses everything except errors
+  -h, --help     Print help
+  -V, --version  Print version
 
+Input Options:
+  -i, --input <FILE_OR_DIR>  One or more input file_collector or directories, if not specified, the current directory is used
+  -R, --recursive            Recursively search for input file_collector in the specified director(y/ies)
+  -x, --extension <XTN>      File extensions(s) to accept (must be exact match, i.e.: "jpg" != "jpeg" != "JPG")
+
+Output Options:
+      --dry-run               Dry run (don't create output file_collector)
+  -o, --output <FILE/FOLDER>  Output destination. If skipped, each output file will be saved in the same directory as the input file
+  -f, --flatten               Flatten the output directory structure when processing multiple input file_collector
+  -p, --prefix <PREFIX>       Prefix to prepend to output file_collector
+  -s, --suffix <SUFFIX>       Suffix to append to output file_collector
+  -y, --overwrite             Overwrite existing files.  Defaults to no
+
+Framing Options:
+      --ar <RATIO>           Fix the final aspect ratio of the output image. Specify the ratio as a fraction (e.g.: "16:9") or a decimal (e.g.: "1.777")
+  -c, --color <COLOR>        Color of the border/background.  Specify any valid CSS color [default: white]
+  -r, --radius <RADIUS>      Add rounded corners to the image.
+  -m, --margins <SIZE(S)>    Relative margins around the image, as a percentage of (width + height) / 2. Specify one to four values, separated by commas, in CSS order
+  -P, --position <POSITION>  Relative position of the input image within the output image. Horizontal values: "left", "center", "right" Vertical values: "top", "center", "bottom"
+
+```
+
+## Examples
+
+The default behavior is to add a white border that's 5% of the image size to all images in the current directory.
+Oliframe will not overwrite existing files by default, so you must use the -y flag to allow overwriting.
 
 ```bash
-# Add a default white border to all images in the current directory
-oliframe
+$ oliframe -y
 ````
 
-```bash
-# Add a 20% black border to a single image
-oliframe -w 20 -c black image.jpg
-```
+![Example 1](images/examples/example_01.jpg)
+
+---
+
+Rounded corners can be added by specifying a radius.
+Instead of editing in place, you can optionally specify an output directory with the -o flag.
 
 ```bash
-# Add a 10% white border to all images in a directory
-oliframe -w 10 -c white -d images
+$ oliframe --radius 20 -o framed_images
 ```
+
+![Example 2](images/examples/example_02.jpeg)
+
+---
+
+More complex borders can be created by specifying the color, final aspect ratio, and position of the image within the
+frame.
 
 ```bash
-# Add a default border to all images in a directory and save them with a new suffix
-oliframe -s _bordered -d images
+$ oliframe --color darkslategray --ar 1:1 --position bottom-left -m 10,50,10,10
 ```
 
-## Library Usage
-
-The library only exposes one function, `add_border`,
-which expects an `&image::DynamicImage` as input and returns a new `image::DynamicImage` with the border applied.
-Loading and saving images is left to the user.
-
-```rust
-use oliframe::*;
-
-fn main() {
-    let img = image::open("image.jpg").unwrap();
-    let bordered_img = add_border(&img, BorderWidth::Percent(5), "white", None);
-    bordered_img.save("image_bordered.jpg").unwrap();
-}
-```
+![Example 3](images/examples/example_03.png)
 
 ## Roadmap / Future Functionality
 
@@ -87,7 +95,7 @@ fn main() {
 
 ## Contributing
 
-Pull requests are welcome.  For major changes, please open an issue first to discuss what you would like to change.
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
 
