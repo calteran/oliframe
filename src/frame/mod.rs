@@ -123,15 +123,15 @@ mod tests {
         let temp_dir = TempDir::with_prefix(TEST_FS_PREFIX).unwrap();
         let config = FrameConfig::default();
         let file_pair = FilePair::new(
-            PathBuf::from("samples/sample00.jpg"),
-            temp_dir.path().join("sample00.jpg"),
+            PathBuf::from("images/test/test_01.jpg"),
+            temp_dir.path().join("test_01.jpg"),
         );
 
         let result = Frame::process(file_pair, &config, false);
         assert!(result.is_ok());
         assert_eq!(
-            "f751f264598cb8bd".to_string(),
-            hash_file(&temp_dir.path().join("sample00.jpg"))
+            "709d92f5f11ca386".to_string(),
+            hash_file(&temp_dir.path().join("test_01.jpg"))
         );
     }
 
@@ -147,15 +147,15 @@ mod tests {
             RelativePosition::default(),
         );
         let file_pair = FilePair::new(
-            PathBuf::from("samples/sample00.jpg"),
-            temp_dir.path().join("sample00.jpg"),
+            PathBuf::from("images/test/test_02.jpeg"),
+            temp_dir.path().join("test_02.jpeg"),
         );
 
         let result = Frame::process(file_pair, &config, false);
         assert!(result.is_ok());
         assert_eq!(
-            "fbcaa7f5aaaee1a9".to_string(),
-            hash_file(&temp_dir.path().join("sample00.jpg"))
+            hash_file(&temp_dir.path().join("test_02.jpeg")),
+            "a646732829f8f8a1".to_string()
         );
     }
 
@@ -164,15 +164,15 @@ mod tests {
         let temp_dir = TempDir::with_prefix(TEST_FS_PREFIX).unwrap();
         let config = FrameConfig::default();
         let file_pair = FilePair::new(
-            PathBuf::from("samples/sample24.png"),
-            temp_dir.path().join("sample24.png"),
+            PathBuf::from("images/test/test_03.png"),
+            temp_dir.path().join("test_03.png"),
         );
 
         let result = Frame::process(file_pair, &config, false);
         assert!(result.is_ok());
         assert_eq!(
-            "3d835adc93318aab".to_string(),
-            hash_file(&temp_dir.path().join("sample24.png"))
+            hash_file(&temp_dir.path().join("test_03.png")),
+            "ac600197e3eae67d".to_string()
         );
     }
 
@@ -181,13 +181,13 @@ mod tests {
         let temp_dir = TempDir::with_prefix(TEST_FS_PREFIX).unwrap();
         let config = FrameConfig::default();
         let file_pair = FilePair::new(
-            PathBuf::from("samples/sample00.jpg"),
-            temp_dir.path().join("sample00.jpg"),
+            PathBuf::from("images/test/test_01.jpg"),
+            temp_dir.path().join("test_01.jpg"),
         );
 
         let result = Frame::process(file_pair, &config, true);
         assert!(result.is_ok());
-        assert!(!temp_dir.path().join("sample00.jpg").exists());
+        assert!(!temp_dir.path().join("test_01.jpg").exists());
     }
 
     fn hash_file(filepath: &PathBuf) -> String {

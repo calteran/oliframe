@@ -7,7 +7,7 @@ use tempfile::{Builder, NamedTempFile, TempDir};
 pub const TEST_FS_PREFIX: &str = "oliframe_test_";
 const HIDDEN_PREFIX: &str = ".oliframe_test_";
 const EXTENSIONS: [&str; 8] = ["jpg", "png", "gif", "jpeg", "bmp", "tiff", "txt", "pdf"];
-const SAMPLE_DIR: &str = "samples";
+const SAMPLE_DIR: &str = "images/test";
 
 pub fn populate_test_directory(base_dir: &TempDir) -> Vec<NamedTempFile> {
     let mut handles = Vec::new();
@@ -37,7 +37,7 @@ pub fn populate_test_directory(base_dir: &TempDir) -> Vec<NamedTempFile> {
     );
 
     let crate_sample_dir = PathBuf::from(SAMPLE_DIR).canonicalize().unwrap();
-    let test_sample_dir = base_dir.path().join(SAMPLE_DIR);
+    let test_sample_dir = base_dir.path().join("test");
     create_dir_all(&test_sample_dir).unwrap();
     dir::copy(crate_sample_dir, test_sample_dir, &CopyOptions::default()).unwrap();
 

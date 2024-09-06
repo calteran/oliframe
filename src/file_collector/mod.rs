@@ -98,7 +98,7 @@ mod tests {
         assert!(file_pairs.iter().any(|file_pair| file_pair
             .input_path()
             .components()
-            .any(|c| c.as_os_str() == "samples")));
+            .any(|c| c.as_os_str() == "test")));
     }
 
     #[test]

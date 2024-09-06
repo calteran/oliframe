@@ -86,7 +86,7 @@ mod tests {
 
     #[test]
     fn load_known_image() {
-        let image_file = PathBuf::from("samples/sample00.jpg");
+        let image_file = PathBuf::from("images/test/test_01.jpg");
         let result = load(&image_file);
         assert!(result.is_ok());
         let (_, fmt) = result.unwrap();
