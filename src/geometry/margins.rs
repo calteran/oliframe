@@ -24,27 +24,28 @@ pub struct Margins {
 impl Margins {
     /// Given the size of a specific image, return the pixel-specific border that represents the margins.
     pub fn to_border_with_size(&self, size: &Size) -> Border {
+        let dim = (size.width() + size.height()) as f32 / 2.;
         match self.values.len() {
             1 => {
-                let side = (self.values[0] * (size.width() + size.height()) as f32 / 2.) as u32;
+                let side = (self.values[0] * dim).round() as u32;
                 Border::new(side, side, side, side)
             }
             2 => {
-                let vertical = (self.values[0] * size.height() as f32) as u32;
-                let horizontal = (self.values[1] * size.width() as f32) as u32;
+                let vertical = (self.values[0] * dim).round() as u32;
+                let horizontal = (self.values[1] * dim).round() as u32;
                 Border::new(vertical, horizontal, vertical, horizontal)
             }
             3 => {
-                let top = (self.values[0] * size.height() as f32) as u32;
-                let side = (self.values[1] * size.width() as f32) as u32;
-                let bottom = (self.values[2] * size.height() as f32) as u32;
+                let top = (self.values[0] * dim).round() as u32;
+                let side = (self.values[1] * dim).round() as u32;
+                let bottom = (self.values[2] * dim).round() as u32;
                 Border::new(top, side, bottom, side)
             }
             4 => {
-                let top = (self.values[0] * size.height() as f32) as u32;
-                let right = (self.values[1] * size.width() as f32) as u32;
-                let bottom = (self.values[2] * size.height() as f32) as u32;
-                let left = (self.values[3] * size.width() as f32) as u32;
+                let top = (self.values[0] * dim).round() as u32;
+                let right = (self.values[1] * dim).round() as u32;
+                let bottom = (self.values[2] * dim).round() as u32;
+                let left = (self.values[3] * dim).round() as u32;
                 Border::new(top, right, bottom, left)
             }
             _ => unreachable!("Invalid number of margin values."),
@@ -162,23 +163,23 @@ mod tests {
 
         let margins = Margins::from_str("10 20").unwrap();
         let border = margins.to_border_with_size(&size);
-        assert_eq!(border.top(), 20);
-        assert_eq!(border.right(), 20);
-        assert_eq!(border.bottom(), 20);
-        assert_eq!(border.left(), 20);
+        assert_eq!(border.top(), 15);
+        assert_eq!(border.right(), 30);
+        assert_eq!(border.bottom(), 15);
+        assert_eq!(border.left(), 30);
 
         let margins = Margins::from_str("10 20 30").unwrap();
         let border = margins.to_border_with_size(&size);
-        assert_eq!(border.top(), 20);
-        assert_eq!(border.right(), 20);
-        assert_eq!(border.bottom(), 60);
-        assert_eq!(border.left(), 20);
+        assert_eq!(border.top(), 15);
+        assert_eq!(border.right(), 30);
+        assert_eq!(border.bottom(), 45);
+        assert_eq!(border.left(), 30);
 
         let margins = Margins::from_str("10 20 30 40").unwrap();
         let border = margins.to_border_with_size(&size);
-        assert_eq!(border.top(), 20);
-        assert_eq!(border.right(), 20);
-        assert_eq!(border.bottom(), 60);
-        assert_eq!(border.left(), 40);
+        assert_eq!(border.top(), 15);
+        assert_eq!(border.right(), 30);
+        assert_eq!(border.bottom(), 45);
+        assert_eq!(border.left(), 60);
     }
 }

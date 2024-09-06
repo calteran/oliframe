@@ -25,8 +25,8 @@ pub struct FrameOptions {
     #[arg(short = 'r', long = "radius", value_name = "RADIUS")]
     corner_radius: Option<u32>,
 
-    /// Relative margin around the image.
-    /// Provide one, two, three, or four values to specify different widths for each side.
+    /// Relative margins around the image, as a percentage of (width + height) / 2.
+    /// Specify one to four values, separated by commas, in CSS order.
     #[arg(short = 'm', long, value_name = "SIZE(S)")]
     margins: Option<String>,
 

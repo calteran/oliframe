@@ -59,17 +59,21 @@ pub fn size_with_border(img_size: &Size, border: &Border) -> Size {
 
 /// Calculate the size of the output image with a given aspect ratio.
 pub fn size_with_ratio(img_size: &Size, aspect_ratio: &AspectRatio, border: &Border) -> Size {
-    let (width, height) = img_size.dimensions();
-    let img_ar = width as f32 / height as f32;
+    let (img_width, img_height) = img_size.dimensions();
+    let frame_width = (img_width + border.left() + border.right()) as f32;
+    let frame_height = (img_height + border.top() + border.bottom()) as f32;
+    let frame_ar = frame_width / frame_height;
 
-    if img_ar > aspect_ratio.inner() {
-        let new_height = height + border.top() + border.bottom();
-        let new_width = (new_height as f32 * aspect_ratio.inner()).round() as u32;
-        Size::from((new_width, new_height))
+    if frame_ar < aspect_ratio.inner() {
+        Size::from((
+            (frame_height * aspect_ratio.inner()).round() as u32,
+            frame_height as u32,
+        ))
     } else {
-        let new_width = width + border.left() + border.right();
-        let new_height = (new_width as f32 / aspect_ratio.inner()).round() as u32;
-        Size::from((new_width, new_height))
+        Size::from((
+            frame_width as u32,
+            (frame_width / aspect_ratio.inner()).round() as u32,
+        ))
     }
 }
 
@@ -135,7 +139,7 @@ mod tests {
             RelativePosition::default(),
         );
         let output_size = output_dimensions(&input_size, &border, &config);
-        assert_eq!(output_size, Size::from((68, 120)));
+        assert_eq!(output_size, Size::from((120, 213)));
     }
 
     #[test]
@@ -151,7 +155,7 @@ mod tests {
             RelativePosition::default(),
         );
         let output_size = output_dimensions(&input_size, &border, &config);
-        assert_eq!(output_size, Size::from((120, 68)));
+        assert_eq!(output_size, Size::from((213, 120)));
     }
 
     #[test]
