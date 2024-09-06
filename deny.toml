@@ -7,3 +7,8 @@ allow = [
     "MIT",
     "Unicode-DFS-2016",
 ]
+
+[bans]
+skip = [
+    "windows-sys@0.52.0"
+]
