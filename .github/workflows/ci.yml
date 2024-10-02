@@ -24,22 +24,22 @@ jobs:
         run: cargo test
       - name: docs
         run: cargo doc --no-deps
-  coverage:
-    runs-on: ubuntu-latest
-    container:
-      image: xd009642/tarpaulin:develop-nightly
-      options: --security-opt seccomp=unconfined
-    steps:
-      - name: checkout
-        uses: actions/checkout@v4
-      - name: generate coverage
-        run: |
-          cargo +nightly tarpaulin --verbose --all-features --workspace --timeout 120 --out xml
-      - name: upload coverage
-        uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
+  #  coverage:
+  #    runs-on: ubuntu-latest
+  #    container:
+  #      image: xd009642/tarpaulin:develop-nightly
+  #      options: --security-opt seccomp=unconfined
+  #    steps:
+  #      - name: checkout
+  #        uses: actions/checkout@v4
+  #      - name: generate coverage
+  #        run: |
+  #          cargo +nightly tarpaulin --verbose --all-features --workspace --timeout 120 --out xml
+  #      - name: upload coverage
+  #        uses: codecov/codecov-action@v2
+  #        with:
+  #          token: ${{ secrets.CODECOV_TOKEN }}
+  #          fail_ci_if_error: true
   enforce-clean-code:
     runs-on: ubuntu-latest
     steps:
