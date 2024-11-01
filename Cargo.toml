@@ -14,17 +14,17 @@ exclude = ["samples/", ".github/"]
 rust-version = "1.75.0"
 
 [dependencies]
-clap = { version = "4.5.19", features = ["derive"] }
+clap = { version = "4.5.20", features = ["derive"] }
 csscolorparser = "0.7.0"
 env_logger = "0.11.5"
-image = { version = "0.25.2", features = ["rayon"] }
+image = { version = "0.25.4", features = ["rayon"] }
 log = "0.4.22"
 rayon = "1.10.0"
 walkdir = "2.5.0"
-regex = "1.11.0"
+regex = "1.11.1"
 strum = { version = "0.26.3", features = ["derive"] }
 strum_macros = "0.26.4"
-thiserror = "1.0.64"
+thiserror = "1.0.66"
 derive-getters = { version = "0.5.0", features = ["auto_copy_getters"] }
 
 [lints.rust]
