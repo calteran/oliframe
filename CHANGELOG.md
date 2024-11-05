@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/calteran/oliframe/compare/v0.1.0...HEAD)
 
+## [0.2.2](https://github.com/calteran/oliframe/compare/v0.2.1...v0.2.2) - 2024-11-05
+
+### Other
+
+- Merge branch 'develop' into dependabot/cargo/develop/crate-deps-fc6a7a0e96
+- remove docs badge
+- *(deps)* bump the crate-deps group with 4 updates
+
 ## [0.2.1](https://github.com/calteran/oliframe/compare/v0.2.0...v0.2.1) - 2024-10-02
 
 ### Other
