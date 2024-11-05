@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/calteran/oliframe/compare/v0.1.0...HEAD)
 
+## [0.2.2](https://github.com/calteran/oliframe/compare/v0.2.1...v0.2.2) - 2024-11-05
+
+### Other
+
+- *(deps)* bump clap from 4.5.19 to 4.5.20
+- *(deps)* bump image from 0.25.2 to 0.25.4
+- *(deps)* bump regex from 1.11.0 to 1.11.1
+- *(deps)* bump thiserror from 1.0.64 to 1.0.66
+
 ## [0.2.1](https://github.com/calteran/oliframe/compare/v0.2.0...v0.2.1) - 2024-10-02
 
 ### Other
