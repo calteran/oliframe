@@ -5,10 +5,11 @@ allow = [
     "BSD-2-Clause",
     "BSD-3-Clause",
     "MIT",
-    "Unicode-DFS-2016",
+    "Unicode-3.0",
 ]
 
 [bans]
 skip = [
-    "windows-sys@0.52.0"
+    "thiserror@1.0.69", # Until https://github.com/xiph/rav1e/pull/3403 (image dep)
+    "thiserror-impl@1.0.69" # Until https://github.com/xiph/rav1e/pull/3403 (image dep)
 ]
