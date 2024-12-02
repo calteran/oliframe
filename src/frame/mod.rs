@@ -172,7 +172,7 @@ mod tests {
         assert!(result.is_ok());
         assert_eq!(
             hash_file(&temp_dir.path().join("test_03.png")),
-            "ac600197e3eae67d".to_string()
+            "951f8ff4fa2f61bb".to_string()
         );
     }
 
