@@ -10,6 +10,15 @@ allow = [
 
 [bans]
 skip = [
-    "thiserror@1.0.69", # Until https://github.com/xiph/rav1e/pull/3403 (image dep)
-    "thiserror-impl@1.0.69" # Until https://github.com/xiph/rav1e/pull/3403 (image dep)
+    "thiserror@1.0.69",
+    #└── rav1e v0.7.1 <- fixed in `master`, but no release yet
+    #    └── ravif v0.11.11
+    #        └── image v0.25.5
+    #            └── oliframe v0.2.4
+    "thiserror-impl@1.0.69"
+    #└── thiserror v1.0.69
+    #    └── rav1e v0.7.1 <- fixed in `master`, but no release yet
+    #        └── ravif v0.11.11
+    #            └── image v0.25.5
+    #                └── oliframe v0.2.4
 ]
