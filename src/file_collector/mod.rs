@@ -89,16 +89,22 @@ mod tests {
 
         let file_pairs = FileCollector::collect(&config);
         assert_ne!(file_pairs.len(), 0);
-        assert!(file_pairs
-            .iter()
-            .all(|file_pair| file_pair.input_path().exists()));
-        assert!(file_pairs
-            .iter()
-            .any(|file_pair| file_pair.input_path().parent() == Some(base_dir.path())));
-        assert!(file_pairs.iter().any(|file_pair| file_pair
-            .input_path()
-            .components()
-            .any(|c| c.as_os_str() == "test")));
+        assert!(
+            file_pairs
+                .iter()
+                .all(|file_pair| file_pair.input_path().exists())
+        );
+        assert!(
+            file_pairs
+                .iter()
+                .any(|file_pair| file_pair.input_path().parent() == Some(base_dir.path()))
+        );
+        assert!(file_pairs.iter().any(|file_pair| {
+            file_pair
+                .input_path()
+                .components()
+                .any(|c| c.as_os_str() == "test")
+        }));
     }
 
     #[test]
@@ -118,13 +124,17 @@ mod tests {
 
         let file_pairs = FileCollector::collect(&config);
         assert_ne!(file_pairs.len(), 0);
-        assert!(file_pairs
-            .iter()
-            .all(|file_pair| file_pair.input_path().exists()));
-        assert!(file_pairs.iter().all(|file_pair| file_pair
-            .input_path()
-            .components()
-            .all(|c| c.as_os_str() != "samples")));
+        assert!(
+            file_pairs
+                .iter()
+                .all(|file_pair| file_pair.input_path().exists())
+        );
+        assert!(file_pairs.iter().all(|file_pair| {
+            file_pair
+                .input_path()
+                .components()
+                .all(|c| c.as_os_str() != "samples")
+        }));
     }
 
     #[test]
@@ -177,13 +187,17 @@ mod tests {
 
         let file_pairs = FileCollector::collect(&config);
         assert_ne!(file_pairs.len(), 0);
-        assert!(file_pairs
-            .iter()
-            .all(|file_pair| file_pair.input_path().exists()));
-        assert!(file_pairs.iter().all(|file_pair| file_pair
-            .input_path()
-            .extension()
-            .map(|ext| ext == "jpg" || ext == "png")
-            .unwrap_or(false)));
+        assert!(
+            file_pairs
+                .iter()
+                .all(|file_pair| file_pair.input_path().exists())
+        );
+        assert!(file_pairs.iter().all(|file_pair| {
+            file_pair
+                .input_path()
+                .extension()
+                .map(|ext| ext == "jpg" || ext == "png")
+                .unwrap_or(false)
+        }));
     }
 }
