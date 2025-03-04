@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/calteran/oliframe/compare/v0.1.0...HEAD)
 
+## [0.3.0](https://github.com/calteran/oliframe/compare/v0.2.5...v0.3.0) - 2025-03-04
+
+### Other
+
+- edition 2024 format fixes
+- [**breaking**] bump Rust edition to 2024, MSRV to 1.85.0
+- *(deps)* bump the crate-deps group with 5 updates
+
 ## [0.2.5](https://github.com/calteran/oliframe/compare/v0.2.4...v0.2.5) - 2025-02-02
 
 ### Other
