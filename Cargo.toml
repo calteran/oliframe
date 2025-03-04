@@ -12,6 +12,7 @@ categories = ["command-line-utilities", "graphics"]
 keywords = ["image", "border", "frame"]
 exclude = ["samples/", ".github/"]
 rust-version = "1.85"
+resolver = "3"
 
 [dependencies]
 clap = { version = "4.5.31", features = ["derive"] }
@@ -24,7 +25,7 @@ walkdir = "2.5.0"
 regex = "1.11.1"
 strum = { version = "0.27.1", features = ["derive"] }
 strum_macros = "0.27.1"
-thiserror = "2.0.11"
+thiserror = "2.0.12"
 derive-getters = { version = "0.5.0", features = ["auto_copy_getters"] }
 
 [lints.rust]
