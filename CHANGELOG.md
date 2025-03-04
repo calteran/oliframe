@@ -13,7 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - edition 2024 format fixes
 - [**breaking**] bump Rust edition to 2024, MSRV to 1.85.0
-- *(deps)* bump the crate-deps group with 5 updates
+- *(deps)* bump strum from 0.26.3 to 0.27.1
+- *(deps)* bump strum_macros from 0.26.4 to 0.27.1
+- *(deps)* bump to latest patch level of clap, log, tempfile and thiserror
 
 ## [0.2.5](https://github.com/calteran/oliframe/compare/v0.2.4...v0.2.5) - 2025-02-02
 
