@@ -1,7 +1,7 @@
 //! Margins module.
 use crate::errors::OliframeError;
-use crate::geometry::border::Border;
 use crate::geometry::Size;
+use crate::geometry::border::Border;
 use derive_getters::Getters;
 use std::str::FromStr;
 

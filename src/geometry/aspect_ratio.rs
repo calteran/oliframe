@@ -46,7 +46,7 @@ impl FromStr for AspectRatio {
                         return Err(OliframeError::InvalidInput(format!(
                             "Denominator cannot be zero: {}",
                             input
-                        )))
+                        )));
                     }
                     _ => continue,
                 }
