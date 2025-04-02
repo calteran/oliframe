@@ -18,7 +18,7 @@ resolver = "3"
 clap = { version = "4.5.35", features = ["derive"] }
 csscolorparser = "0.7.0"
 env_logger = "0.11.8"
-image = { version = "0.25.6", features = ["rayon"] }
+image = { version = "0.25.6", features = ["bmp", "gif", "hdr", "ico", "jpeg", "png", "tga", "tiff", "webp", "rayon"], default-features = false }
 log = "0.4.27"
 rayon = "1.10.0"
 walkdir = "2.5.0"
