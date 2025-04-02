@@ -130,7 +130,7 @@ mod tests {
         let result = Frame::process(file_pair, &config, false);
         assert!(result.is_ok());
         assert_eq!(
-            "709d92f5f11ca386".to_string(),
+            "ecc66af0173bb87c".to_string(),
             hash_file(&temp_dir.path().join("test_01.jpg"))
         );
     }
@@ -155,7 +155,7 @@ mod tests {
         assert!(result.is_ok());
         assert_eq!(
             hash_file(&temp_dir.path().join("test_02.jpeg")),
-            "a646732829f8f8a1".to_string()
+            "136bf883d5ad6df6".to_string()
         );
     }
 
