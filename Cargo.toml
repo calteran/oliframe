@@ -15,7 +15,7 @@ rust-version = "1.85"
 resolver = "3"
 
 [dependencies]
-clap = { version = "4.5.35", features = ["derive"] }
+clap = { version = "4.5.37", features = ["derive"] }
 csscolorparser = "0.7.0"
 env_logger = "0.11.8"
 image = { version = "0.25.6", features = ["bmp", "gif", "hdr", "ico", "jpeg", "png", "tga", "tiff", "webp", "rayon"], default-features = false }
