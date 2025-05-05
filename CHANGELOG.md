@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/calteran/oliframe/compare/v0.1.0...HEAD)
 
+## [0.3.2](https://github.com/calteran/oliframe/compare/v0.3.1...v0.3.2) - 2025-05-05
+
+### Other
+
+- *(deps)* bump clap from 4.5.35 to 4.5.37
+
 ## [0.3.1](https://github.com/calteran/oliframe/compare/v0.3.0...v0.3.1) - 2025-04-02
 
 - *(deps)* bump patch level of clap, env_logger, image, log, and tempfile
