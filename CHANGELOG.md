@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/calteran/oliframe/compare/v0.1.0...HEAD)
 
+## [0.3.3](https://github.com/calteran/oliframe/compare/v0.3.2...v0.3.3) - 2025-06-02
+
+### Fixed
+
+- *(docs)* fix display of CI status badge in readme
+
+### Other
+
+- *(deps)* bump the patch level of clap and csscolorparser
+- *(deps)* bump tempfile from 3.19.1 to 3.20.0
+
 ## [0.3.2](https://github.com/calteran/oliframe/compare/v0.3.1...v0.3.2) - 2025-05-05
 
 ### Other
