@@ -16,7 +16,7 @@ pub fn populate_test_directory(base_dir: &TempDir) -> Vec<NamedTempFile> {
         .map(|ext| {
             Builder::new()
                 .prefix(TEST_FS_PREFIX)
-                .suffix(&format!(".{}", ext))
+                .suffix(&format!(".{ext}"))
                 .tempfile_in(base_dir.path())
                 .unwrap()
         })

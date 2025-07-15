@@ -45,12 +45,12 @@ fn authorize_overwrite(path: &PathBuf, overwrite: bool) -> bool {
     }
 
     if overwrite {
-        log::warn!("Overwriting existing file: {:?}", path);
+        log::warn!("Overwriting existing file: {path:?}");
         return true;
     }
 
     #[rustfmt::skip] // When the string is on its own line, tarpaulin thinks it's untested
-    log::warn!("File already exists: {:?}.  Run with --y to replace it.", path);
+    log::warn!("File already exists: {path:?}.  Run with --y to replace it.");
     false
 }
 

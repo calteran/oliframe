@@ -60,8 +60,7 @@ impl Margins {
         let len = values.len();
         if !(1..=4).contains(&len) {
             return Err(OliframeError::InvalidInput(format!(
-                "Margins must be specified with 1-4 positive values (received {} values).",
-                len
+                "Margins must be specified with 1-4 positive values (received {len} values)."
             )));
         }
 
