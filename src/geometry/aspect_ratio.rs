@@ -44,8 +44,7 @@ impl FromStr for AspectRatio {
                     }
                     (Ok(_), Ok(0.0)) => {
                         return Err(OliframeError::InvalidInput(format!(
-                            "Denominator cannot be zero: {}",
-                            input
+                            "Denominator cannot be zero: {input}"
                         )));
                     }
                     _ => continue,
@@ -54,8 +53,7 @@ impl FromStr for AspectRatio {
         }
 
         Err(OliframeError::InvalidInput(format!(
-            "Invalid ratio: {}",
-            input
+            "Invalid ratio: {input}"
         )))
     }
 }

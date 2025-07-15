@@ -41,12 +41,12 @@ fn main() {
     let config = match Config::try_from(args) {
         Ok(c) => c,
         Err(e) => {
-            log::error!("{}", e);
+            log::error!("{e}");
             std::process::exit(1);
         }
     };
 
-    log::debug!("Configuration: {:#?}", config);
+    log::debug!("Configuration: {config:#?}");
 
     FileCollector::collect(&config)
         .into_par_iter()
@@ -56,6 +56,6 @@ fn main() {
                 config.frame_config(),
                 config.output_config().dry_run(),
             )
-            .unwrap_or_else(|e| log::error!("{}", e));
+            .unwrap_or_else(|e| log::error!("{e}"));
         });
 }

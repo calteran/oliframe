@@ -19,7 +19,7 @@ impl FilePair {
     pub fn build(base_path: &PathBuf, input_path: PathBuf, output_config: &OutputConfig) -> Self {
         let relative_path = input_path
             .strip_prefix(base_path)
-            .unwrap_or_else(|_| panic!("Failed to strip prefix: {:?}", input_path))
+            .unwrap_or_else(|_| panic!("Failed to strip prefix: {input_path:?}"))
             .parent()
             .unwrap_or(Path::new(""));
         let output_filename = filename(&input_path, output_config);
