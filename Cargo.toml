@@ -15,7 +15,7 @@ rust-version = "1.85"
 resolver = "3"
 
 [dependencies]
-clap = { version = "4.5.40", features = ["derive"] }
+clap = { version = "4.5.42", features = ["derive"] }
 csscolorparser = "0.7.2"
 env_logger = "0.11.8"
 image = { version = "0.25.6", features = ["bmp", "gif", "hdr", "ico", "jpeg", "png", "tga", "tiff", "webp", "rayon"], default-features = false }
@@ -23,8 +23,8 @@ log = "0.4.27"
 rayon = "1.10.0"
 walkdir = "2.5.0"
 regex = "1.11.1"
-strum = { version = "0.27.1", features = ["derive"] }
-strum_macros = "0.27.1"
+strum = { version = "0.27.2", features = ["derive"] }
+strum_macros = "0.27.2"
 thiserror = "2.0.12"
 derive-getters = { version = "0.5.0", features = ["auto_copy_getters"] }
 
