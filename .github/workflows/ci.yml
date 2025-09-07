@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: configure toolchain
         run: rustup toolchain install stable --profile minimal
       - name: build
@@ -31,7 +31,7 @@ jobs:
   #      options: --security-opt seccomp=unconfined
   #    steps:
   #      - name: checkout
-  #        uses: actions/checkout@v4
+  #        uses: actions/checkout@v5
   #      - name: generate coverage
   #        run: |
   #          cargo +nightly tarpaulin --verbose --all-features --workspace --timeout 120 --out xml
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: configure toolchain
         run: rustup toolchain install stable --profile minimal
       - name: run deny
