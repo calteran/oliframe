@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.5](https://github.com/calteran/oliframe/compare/v0.3.4...v0.3.5) - 2025-09-07
+
+### Other
+
+- *(deps)* bump rayon from 1.10.0 to 1.11.0
+- *(deps)* bump tempfile from 3.20.0 to 3.21.0
+- *(deps)* bump the patch level of clap, regex and thiserror
+
 ## [0.3.4](https://github.com/calteran/oliframe/compare/v0.3.3...v0.3.4) - 2025-08-04
 
 ### Other
