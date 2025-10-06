@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.6](https://github.com/calteran/oliframe/compare/v0.3.5...v0.3.6) - 2025-10-06
+
+### Fixed
+
+- adjusted test image hashes due to `image` encoding changes
+
+### Other
+
+- *(deps)* bump tempfile from 3.21.0 to 3.23.0
+- *(deps)* bump the patch level of clap, image, log, regex and thiserror
+
 ## [0.3.5](https://github.com/calteran/oliframe/compare/v0.3.4...v0.3.5) - 2025-09-07
 
 ### Other
