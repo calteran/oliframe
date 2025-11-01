@@ -15,14 +15,14 @@ rust-version = "1.85"
 resolver = "3"
 
 [dependencies]
-clap = { version = "4.5.48", features = ["derive"] }
+clap = { version = "4.5.51", features = ["derive"] }
 csscolorparser = "0.7.2"
 env_logger = "0.11.8"
 image = { version = "0.25.8", features = ["bmp", "gif", "hdr", "ico", "jpeg", "png", "tga", "tiff", "webp", "rayon"], default-features = false }
 log = "0.4.28"
 rayon = "1.11.0"
 walkdir = "2.5.0"
-regex = "1.11.3"
+regex = "1.12.2"
 strum = { version = "0.27.2", features = ["derive"] }
 strum_macros = "0.27.2"
 thiserror = "2.0.17"
