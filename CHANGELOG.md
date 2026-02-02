@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.8](https://github.com/calteran/oliframe/compare/v0.3.7...v0.3.8) - 2026-02-02
+
+### Other
+
+- *(deps)* bump tempfile from 3.23.0 to 3.24.0
+- *(deps)* bump patch level of clap, csscolorparser, log and thiserror
+
 ## [0.3.7](https://github.com/calteran/oliframe/compare/v0.3.6...v0.3.7) - 2025-12-02
 
 ### Other
