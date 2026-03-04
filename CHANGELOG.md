@@ -11,7 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Other
 
-- *(deps)* bump the crate-deps group with 6 updates
+- *(deps)* bump strum from 0.27.2 to 0.28.0
+- *(deps)* bump strum_macros from 0.27.2 to 0.28.0
+- *(deps)* bump tempfile from 3.24.0 to 3.26.0
+- *(deps)* bump the patch level of clap, env_logger, and regex
 
 ## [0.3.8](https://github.com/calteran/oliframe/compare/v0.3.7...v0.3.8) - 2026-02-02
 
