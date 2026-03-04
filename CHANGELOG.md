@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.9](https://github.com/calteran/oliframe/compare/v0.3.8...v0.3.9) - 2026-03-04
+
+### Other
+
+- *(deps)* bump the crate-deps group with 6 updates
+
 ## [0.3.8](https://github.com/calteran/oliframe/compare/v0.3.7...v0.3.8) - 2026-02-02
 
 ### Other
