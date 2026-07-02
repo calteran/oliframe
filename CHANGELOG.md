@@ -11,8 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Other
 
-- *(deps)* bump the crate-deps group with 4 updates
-- *(deps)* combined dependency updates (PRs #109 and #111) ([#112](https://github.com/calteran/oliframe/pull/112))
+- *(deps)* bump clap from 4.5.60 to 4.6.1
+- *(deps)* bump rayon from 1.11.0 to 1.12.0
+- *(deps)* bump tempfile from 3.26.0 to 3.27.0
+- *(deps)* bump actions/checkout from 6 to 7
+- *(deps)* bump the patch level of csscolorparser, env_logger, log, regex, and xxhash-rust
 
 ## [0.3.9](https://github.com/calteran/oliframe/compare/v0.3.8...v0.3.9) - 2026-03-04
 
