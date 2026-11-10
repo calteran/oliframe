@@ -11,7 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Other
 
-- update Cargo.lock dependencies
+- *(deps)* bump regex from 1.12.4 to 1.13.1
+- *(deps)* bump crossbeam-epoch from 0.9.18 to 0.9.21 (RUSTSEC-2026-0204)
+- *(deps)* bump the patch level of clap, csscolorparser, log, thiserror, and xxhash-rust
 
 ## [0.3.10](https://github.com/calteran/oliframe/compare/v0.3.9...v0.3.10) - 2026-07-02
 
